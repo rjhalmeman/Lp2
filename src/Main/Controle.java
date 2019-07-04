@@ -46,7 +46,15 @@ public class Controle {
            }
        }
        return null;
-       
+      
    }
+
+    public void alterar(Trabalhador trabalhador, Trabalhador trabalhadorAntigo) {
+       lista.set(lista.indexOf(trabalhadorAntigo), trabalhador);
+    }
+
+    public void excluir(Trabalhador trabalhador) {
+       lista.remove(trabalhador);
+    }
     
 }
