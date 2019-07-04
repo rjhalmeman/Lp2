@@ -33,10 +33,8 @@ public class Controle {
         lista.add(trabalhador);
     }
     
-    public void listar(){
-        for (int i = 0; i < lista.size(); i++) {
-            System.out.println(lista.get(i).toString());
-        }
+    public List<Trabalhador> listar(){
+        return lista;
     }
     
    public Trabalhador buscar(String cpf){
@@ -51,6 +49,8 @@ public class Controle {
 
     public void alterar(Trabalhador trabalhador, Trabalhador trabalhadorAntigo) {
        lista.set(lista.indexOf(trabalhadorAntigo), trabalhador);
+      
+       
     }
 
     public void excluir(Trabalhador trabalhador) {

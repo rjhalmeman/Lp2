@@ -1,14 +1,20 @@
 package Main;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 
 /**
  *
@@ -31,6 +37,13 @@ public class GUI extends JFrame {
     JButton btExcluir = new JButton("Excluir");
     JButton btSalvar = new JButton("Salvar");
     JButton btCancelar = new JButton("Cancelar");
+    JToolBar toolBar = new JToolBar();
+    JPanel painelNorte = new JPanel();
+    JPanel painelCentro = new JPanel();
+    JPanel painelSul = new JPanel();
+    JTextArea texto = new JTextArea();
+
+    String acao = "";
 
     Controle controle = new Controle();
     Trabalhador trabalhador = new Trabalhador();
@@ -44,20 +57,33 @@ public class GUI extends JFrame {
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
-        cp.setLayout(new GridLayout(7, 2));
-        cp.add(lbCpf);
-        cp.add(tfCpf);
-        cp.add(lbNome);
-        cp.add(tfNome);
-        cp.add(lbSalario);
-        cp.add(tfSalario);
-        cp.add(btAdicionar);
-        cp.add(btListar);
-        cp.add(btBuscar);
-        cp.add(btAlterar);
-        cp.add(btExcluir);
-        cp.add(btSalvar);
-        cp.add(btCancelar);
+
+        cp.setLayout(new BorderLayout());
+        cp.add(painelNorte, BorderLayout.NORTH);
+        cp.add(painelCentro, BorderLayout.CENTER);
+        cp.add(painelSul, BorderLayout.SOUTH);
+
+        painelSul.setLayout(new GridLayout(1, 1));
+        //   JScrollBar scrollBar = new JScrollBar();
+        painelSul.add(texto);
+
+        painelNorte.add(toolBar);
+
+        painelCentro.setLayout(new GridLayout(3, 2));
+        painelCentro.add(lbCpf);
+        painelCentro.add(tfCpf);
+        painelCentro.add(lbNome);
+        painelCentro.add(tfNome);
+        painelCentro.add(lbSalario);
+        painelCentro.add(tfSalario);
+
+        toolBar.add(btAdicionar);
+        toolBar.add(btListar);
+        toolBar.add(btBuscar);
+        toolBar.add(btAlterar);
+        toolBar.add(btExcluir);
+        toolBar.add(btSalvar);
+        toolBar.add(btCancelar);
 
         btAdicionar.setVisible(false);
         btAlterar.setVisible(false);
@@ -68,6 +94,7 @@ public class GUI extends JFrame {
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                btAdicionar.setVisible(false);
                 if (tfCpf.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(cp,
                             "CPF nâo pode ser vazio");
@@ -79,11 +106,15 @@ public class GUI extends JFrame {
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
+                        tfNome.setText("");
+                        tfSalario.setText("");
+
                     } else {//encontrou
                         tfNome.setText(trabalhador.getNome());
                         tfSalario.setText(String.valueOf(trabalhador.getSalario()));
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
+
                     }
                 }
             }
@@ -92,11 +123,16 @@ public class GUI extends JFrame {
         btAdicionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trabalhador = new Trabalhador();
-                trabalhador.setCpf(tfCpf.getText());
-                trabalhador.setNome(tfNome.getText());
-                trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
-                controle.adicionar(trabalhador);
+                acao = "adicionar";
+                tfCpf.setEditable(false);
+                tfNome.requestFocus();
+                btSalvar.setVisible(true);
+                btCancelar.setVisible(true);
+                btBuscar.setVisible(false);
+                btListar.setVisible(false);
+                btAlterar.setVisible(false);
+                btExcluir.setVisible(false);
+
                 btAdicionar.setVisible(false);
             }
         });
@@ -104,6 +140,7 @@ public class GUI extends JFrame {
         btAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                acao = "alterar";
                 tfCpf.setEditable(false);
                 tfNome.requestFocus();
                 btSalvar.setVisible(true);
@@ -133,10 +170,18 @@ public class GUI extends JFrame {
         btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Trabalhador trabalhadorAntigo = trabalhador;
-                trabalhador.setNome(tfNome.getText());
-                trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
-                controle.alterar(trabalhador, trabalhadorAntigo);
+                if (acao.equals("alterar")) {
+                    Trabalhador trabalhadorAntigo = trabalhador;
+                    trabalhador.setNome(tfNome.getText());
+                    trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
+                    controle.alterar(trabalhador, trabalhadorAntigo);
+                } else {//adicionar
+                    trabalhador = new Trabalhador();
+                    trabalhador.setCpf(tfCpf.getText());
+                    trabalhador.setNome(tfNome.getText());
+                    trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
+                    controle.adicionar(trabalhador);
+                }
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
                 btBuscar.setVisible(true);
@@ -173,7 +218,13 @@ public class GUI extends JFrame {
         btListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controle.listar();
+                List<Trabalhador> lt = controle.listar();
+                texto.setText("");//limpa o textArea
+                for (int i = 0; i < lt.size(); i++) {
+                    texto.append(lt.get(i).getCpf() + "-"
+                            + lt.get(i).getNome() + "-"
+                            + lt.get(i).getSalario() + "\n");
+                }
             }
         });
 
