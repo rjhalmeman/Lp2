@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -22,37 +23,39 @@ import javax.swing.JToolBar;
  */
 public class GUI extends JFrame {
 
-    Container cp;
+    private Container cp;
 
-    JLabel lbCpf = new JLabel("CPF");
-    JTextField tfCpf = new JTextField(20);
-    JLabel lbNome = new JLabel("Nome");
-    JTextField tfNome = new JTextField(50);
-    JLabel lbSalario = new JLabel("Salário");
-    JTextField tfSalario = new JTextField(20);
-    JButton btAdicionar = new JButton("Adicionar");
-    JButton btListar = new JButton("Listar");
-    JButton btBuscar = new JButton("Buscar");
-    JButton btAlterar = new JButton("Alterar");
-    JButton btExcluir = new JButton("Excluir");
-    JButton btSalvar = new JButton("Salvar");
-    JButton btCancelar = new JButton("Cancelar");
-    JToolBar toolBar = new JToolBar();
-    JPanel painelNorte = new JPanel();
-    JPanel painelCentro = new JPanel();
-    JPanel painelSul = new JPanel();
-    JTextArea texto = new JTextArea();
+    private JLabel lbCpf = new JLabel("CPF");
+    private JTextField tfCpf = new JTextField(20);
+    private JLabel lbNome = new JLabel("Nome");
+    private JTextField tfNome = new JTextField(50);
+    private JLabel lbSalario = new JLabel("Salário");
+    private JTextField tfSalario = new JTextField(20);
+    private JButton btAdicionar = new JButton("Adicionar");
+    private JButton btListar = new JButton("Listar");
+    private JButton btBuscar = new JButton("Buscar");
+    private JButton btAlterar = new JButton("Alterar");
+    private JButton btExcluir = new JButton("Excluir");
+    private JButton btSalvar = new JButton("Salvar");
+    private JButton btCancelar = new JButton("Cancelar");
+    private JToolBar toolBar = new JToolBar();
+    private JPanel painelNorte = new JPanel();
+    private JPanel painelCentro = new JPanel();
+    private JPanel painelSul = new JPanel();
+    private JTextArea texto = new JTextArea();
+    private JScrollPane scroll = new JScrollPane();
 
-    String acao = "";
+    private String acao = "";
+    private String chavePrimaria = "";
 
-    Controle controle = new Controle();
-    Trabalhador trabalhador = new Trabalhador();
+    private Controle controle = new Controle();
+    private Trabalhador trabalhador = new Trabalhador();
 
     public GUI() {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        setSize(400, 300);
+        setSize(800, 500);
         setTitle("CRUD Trabalhador");
         setLocationRelativeTo(null);//centro do monitor
 
@@ -64,22 +67,25 @@ public class GUI extends JFrame {
         cp.add(painelSul, BorderLayout.SOUTH);
 
         painelSul.setLayout(new GridLayout(1, 1));
-        //   JScrollBar scrollBar = new JScrollBar();
-        painelSul.add(texto);
+        texto.setText("\n\n\n\n\n");//5 linhas de tamanho
+        scroll.setViewportView(texto);
+        painelSul.add(scroll);
 
+        painelNorte.setLayout(new GridLayout(1, 1));
         painelNorte.add(toolBar);
 
         painelCentro.setLayout(new GridLayout(3, 2));
-        painelCentro.add(lbCpf);
-        painelCentro.add(tfCpf);
+
         painelCentro.add(lbNome);
         painelCentro.add(tfNome);
         painelCentro.add(lbSalario);
         painelCentro.add(tfSalario);
 
+        toolBar.add(lbCpf);
+        toolBar.add(tfCpf);
         toolBar.add(btAdicionar);
-        toolBar.add(btListar);
         toolBar.add(btBuscar);
+        toolBar.add(btListar);
         toolBar.add(btAlterar);
         toolBar.add(btExcluir);
         toolBar.add(btSalvar);
@@ -91,16 +97,20 @@ public class GUI extends JFrame {
         btSalvar.setVisible(false);
         btCancelar.setVisible(false);
 
+        tfNome.setEditable(false);
+        tfSalario.setEditable(false);//atributos começam bloqueados
+        texto.setEditable(false);
+
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 btAdicionar.setVisible(false);
                 if (tfCpf.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(cp,
-                            "CPF nâo pode ser vazio");
+                    JOptionPane.showMessageDialog(cp, "CPF nâo pode ser vazio");
                     tfCpf.requestFocus();
                     tfCpf.selectAll();
                 } else {
+                    chavePrimaria = tfCpf.getText();//para uso no adicionar
                     trabalhador = controle.buscar(tfCpf.getText());
                     if (trabalhador == null) {//nao encontrou
                         btAdicionar.setVisible(true);
@@ -108,13 +118,14 @@ public class GUI extends JFrame {
                         btExcluir.setVisible(false);
                         tfNome.setText("");
                         tfSalario.setText("");
+                        texto.setText("Não encontrou na lista - pode Adicionar\n\n\n");//limpa o campo texto
 
                     } else {//encontrou
                         tfNome.setText(trabalhador.getNome());
                         tfSalario.setText(String.valueOf(trabalhador.getSalario()));
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
-
+                        texto.setText("Encontrou na lista - pode Alterar ou Excluir\n\n\n");//limpa o campo texto
                     }
                 }
             }
@@ -124,6 +135,7 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 acao = "adicionar";
+                tfCpf.setText(chavePrimaria);//para retornar ao valor original (caso o usuário mude e tente enganar o programa)
                 tfCpf.setEditable(false);
                 tfNome.requestFocus();
                 btSalvar.setVisible(true);
@@ -134,6 +146,9 @@ public class GUI extends JFrame {
                 btExcluir.setVisible(false);
 
                 btAdicionar.setVisible(false);
+                texto.setText("Preencha os atributos\n\n\n\n\n");//limpa o campo texto
+                tfNome.setEditable(true);
+                tfSalario.setEditable(true);
             }
         });
 
@@ -141,6 +156,7 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 acao = "alterar";
+                tfCpf.setText(chavePrimaria);//para retornar ao valor original (caso o usuário mude e tente enganar o programa)
                 tfCpf.setEditable(false);
                 tfNome.requestFocus();
                 btSalvar.setVisible(true);
@@ -149,6 +165,9 @@ public class GUI extends JFrame {
                 btListar.setVisible(false);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
+                texto.setText("Preencha os atributos\n\n\n\n\n");//limpa o campo texto
+                tfNome.setEditable(true);
+                tfSalario.setEditable(true);
             }
         });
 
@@ -164,6 +183,9 @@ public class GUI extends JFrame {
                 tfSalario.setText("");
                 tfCpf.requestFocus();
                 tfCpf.selectAll();
+                texto.setText("Cancelou\n\n\n\n\n");//limpa o campo texto
+                tfNome.setEditable(false);
+                tfSalario.setEditable(false);
             }
         });
 
@@ -175,12 +197,14 @@ public class GUI extends JFrame {
                     trabalhador.setNome(tfNome.getText());
                     trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
                     controle.alterar(trabalhador, trabalhadorAntigo);
+                    texto.setText("Registro alterado\n\n\n\n\n");//limpa o campo texto
                 } else {//adicionar
                     trabalhador = new Trabalhador();
                     trabalhador.setCpf(tfCpf.getText());
                     trabalhador.setNome(tfNome.getText());
                     trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
                     controle.adicionar(trabalhador);
+                    texto.setText("Foi adicionado um novo registro\n\n\n\n\n");//limpa o campo texto
                 }
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
@@ -191,11 +215,15 @@ public class GUI extends JFrame {
                 tfSalario.setText("");
                 tfCpf.requestFocus();
                 tfCpf.selectAll();
+                tfNome.setEditable(false);
+                tfSalario.setEditable(false);
             }
+
         });
         btExcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tfCpf.setText(chavePrimaria);//para retornar ao valor original (caso o usuário mude e tente enganar o programa)
                 if (JOptionPane.YES_OPTION
                         == JOptionPane.showConfirmDialog(null,
                                 "Confirma a exclusão do registro <Nome = " + trabalhador.getNome() + ">?", "Confirm",
@@ -211,7 +239,7 @@ public class GUI extends JFrame {
                 tfCpf.selectAll();
                 btExcluir.setVisible(false);
                 btAlterar.setVisible(false);
-
+                texto.setText("Excluiu o registro de " + trabalhador.getCpf() + " - " + trabalhador.getNome() + "\n\n\n\n\n");//limpa o campo texto
             }
         });
 
@@ -225,9 +253,11 @@ public class GUI extends JFrame {
                             + lt.get(i).getNome() + "-"
                             + lt.get(i).getSalario() + "\n");
                 }
+                btAlterar.setVisible(false);
+                btExcluir.setVisible(false);
+                btAdicionar.setVisible(false);
             }
         });
-
         setVisible(true);
 
     }
