@@ -17,12 +17,13 @@ public class Controle {
         t.setCpf("123");
         t.setNome("Timocréia");
         t.setSalario(5000);
+        t.setAposentado(false);
         adicionar(t);
-        t = new Trabalhador("456", "Berola", 3252.97);
+        t = new Trabalhador("456", "Berola", 3252.97,true);
         adicionar(t);
-        t = new Trabalhador("789", "Reduzina", 3000.30);
+        t = new Trabalhador("789", "Reduzina", 3000.30,false);
         adicionar(t);
-        t = new Trabalhador("111", "Zulida", 3000.30);
+        t = new Trabalhador("111", "Zulida", 3000.30,true);
         adicionar(t);
     }
 

@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="CrudCanguru_BaseParaAval" default="default" basedir=".">
-    <description>Builds, tests, and runs the project CrudCanguru_BaseParaAval.</description>
+<project name="CrudCanguru_V5_boolean" default="default" basedir=".">
+    <description>Builds, tests, and runs the project CrudCanguru_V5_boolean.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -58,7 +58,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="CrudCanguru_BaseParaAval-impl.jar">
+        <target name="run" depends="CrudCanguru_V5_boolean-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>

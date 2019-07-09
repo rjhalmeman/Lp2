@@ -7,11 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -31,6 +31,7 @@ public class GUI extends JFrame {
     private JTextField tfNome = new JTextField(50);
     private JLabel lbSalario = new JLabel("Salário");
     private JTextField tfSalario = new JTextField(20);
+    private JCheckBox cbAposentado = new JCheckBox("Aposentado", false);
     private JButton btAdicionar = new JButton("Adicionar");
     private JButton btListar = new JButton("Listar");
     private JButton btBuscar = new JButton("Buscar");
@@ -56,7 +57,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(800, 500);
-        setTitle("CRUD Trabalhador");
+        setTitle("CRUD Trabalhador - V5");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
@@ -80,6 +81,7 @@ public class GUI extends JFrame {
         painelCentro.add(tfNome);
         painelCentro.add(lbSalario);
         painelCentro.add(tfSalario);
+        painelCentro.add(cbAposentado);
 
         toolBar.add(lbCpf);
         toolBar.add(tfCpf);
@@ -99,6 +101,7 @@ public class GUI extends JFrame {
 
         tfNome.setEditable(false);
         tfSalario.setEditable(false);//atributos começam bloqueados
+        cbAposentado.setEnabled(false);
         texto.setEditable(false);
 
         btBuscar.addActionListener(new ActionListener() {
@@ -118,14 +121,19 @@ public class GUI extends JFrame {
                         btExcluir.setVisible(false);
                         tfNome.setText("");
                         tfSalario.setText("");
+                        cbAposentado.setSelected(false);
                         texto.setText("Não encontrou na lista - pode Adicionar\n\n\n");//limpa o campo texto
 
                     } else {//encontrou
                         tfNome.setText(trabalhador.getNome());
                         tfSalario.setText(String.valueOf(trabalhador.getSalario()));
+                        cbAposentado.setSelected(trabalhador.isAposentado());
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         texto.setText("Encontrou na lista - pode Alterar ou Excluir\n\n\n");//limpa o campo texto
+                        tfNome.setEditable(false);
+                        tfSalario.setEditable(false);//atributos começam bloqueados
+                        cbAposentado.setEnabled(false);
                     }
                 }
             }
@@ -149,6 +157,7 @@ public class GUI extends JFrame {
                 texto.setText("Preencha os atributos\n\n\n\n\n");//limpa o campo texto
                 tfNome.setEditable(true);
                 tfSalario.setEditable(true);
+                cbAposentado.setEnabled(true);
             }
         });
 
@@ -168,6 +177,7 @@ public class GUI extends JFrame {
                 texto.setText("Preencha os atributos\n\n\n\n\n");//limpa o campo texto
                 tfNome.setEditable(true);
                 tfSalario.setEditable(true);
+                cbAposentado.setEnabled(true);
             }
         });
 
@@ -181,11 +191,13 @@ public class GUI extends JFrame {
                 tfCpf.setEditable(true);
                 tfNome.setText("");
                 tfSalario.setText("");
+                cbAposentado.setSelected(false);
                 tfCpf.requestFocus();
                 tfCpf.selectAll();
                 texto.setText("Cancelou\n\n\n\n\n");//limpa o campo texto
                 tfNome.setEditable(false);
                 tfSalario.setEditable(false);
+                cbAposentado.setEnabled(false);
             }
         });
 
@@ -196,6 +208,7 @@ public class GUI extends JFrame {
                     Trabalhador trabalhadorAntigo = trabalhador;
                     trabalhador.setNome(tfNome.getText());
                     trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
+                    trabalhador.setAposentado(cbAposentado.isSelected());
                     controle.alterar(trabalhador, trabalhadorAntigo);
                     texto.setText("Registro alterado\n\n\n\n\n");//limpa o campo texto
                 } else {//adicionar
@@ -203,6 +216,7 @@ public class GUI extends JFrame {
                     trabalhador.setCpf(tfCpf.getText());
                     trabalhador.setNome(tfNome.getText());
                     trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
+                    trabalhador.setAposentado(cbAposentado.isSelected());
                     controle.adicionar(trabalhador);
                     texto.setText("Foi adicionado um novo registro\n\n\n\n\n");//limpa o campo texto
                 }
@@ -217,6 +231,8 @@ public class GUI extends JFrame {
                 tfCpf.selectAll();
                 tfNome.setEditable(false);
                 tfSalario.setEditable(false);
+                cbAposentado.setSelected(false);
+                cbAposentado.setEnabled(true);
             }
 
         });
@@ -235,6 +251,8 @@ public class GUI extends JFrame {
                 tfCpf.setEditable(true);
                 tfNome.setText("");
                 tfSalario.setText("");
+                cbAposentado.setSelected(false);
+                cbAposentado.setEnabled(true);
                 tfCpf.requestFocus();
                 tfCpf.selectAll();
                 btExcluir.setVisible(false);
@@ -247,11 +265,11 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<Trabalhador> lt = controle.listar();
-                texto.setText("");//limpa o textArea
+                texto.setText("Id - Nome - Salário - Aposentado\n");//limpa o textArea
                 for (int i = 0; i < lt.size(); i++) {
                     texto.append(lt.get(i).getCpf() + "-"
                             + lt.get(i).getNome() + "-"
-                            + lt.get(i).getSalario() + "\n");
+                            + lt.get(i).getSalario() + " - " + (lt.get(i).isAposentado() ? "Sim" : "Não") + "\n");
                 }
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
