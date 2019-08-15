@@ -5,6 +5,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,17 +20,21 @@ import javax.swing.JTextField;
  * @author radames
  */
 public class GUI extends JFrame {
+
     private final Container cp;
     private final JPanel pnNorte = new JPanel();
     private final JPanel pnCentro = new JPanel();
     private final JPanel pnSul = new JPanel();
-    
-    private final JLabel jLabel = new JLabel("um label");
-    private final JTextField jTextField = new JTextField(30); 
-    private final JButton jButton = new JButton("OK");
-    
+
+    private final JLabel lbData = new JLabel("Data");
+      DateTextField tfDataInicial = new DateTextField();
+    private final JButton btVai = new JButton("=>");
+    private final JTextField tfDataFinal = new JTextField(10);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public GUI() {
+        sdf.setLenient(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         //muda a cor dos painéis para que possamos vê-los
@@ -38,24 +47,31 @@ public class GUI extends JFrame {
         cp.add(pnNorte, BorderLayout.NORTH);
         cp.add(pnCentro, BorderLayout.CENTER);
         cp.add(pnSul, BorderLayout.SOUTH);
-        
-        pnNorte.add(jLabel);
-        pnNorte.add(jTextField);
-        pnNorte.add(jButton);
-        
+
+        pnNorte.add(lbData);
+        pnNorte.add(tfDataInicial);
+        pnNorte.add(btVai);
+        pnNorte.add(tfDataFinal);
 
         setTitle("GUI Básica - guib");
-        setSize(800, 600);
+        setSize(500, 200);
 
-        
-        jButton.addActionListener(new ActionListener() {
+        btVai.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jTextField.setText("você clicou o botão");
+                Date data = new Date();//pega a data e hora do sistema
+
+                try {
+                    data = sdf.parse(tfDataInicial.getText());
+                    SimpleDateFormat sdfEUA = new SimpleDateFormat("yyyy-MM-dd");
+                    tfDataFinal.setText(sdfEUA.format(data));
+                } catch (ParseException ex) {
+                    System.out.println("Erro na data");
+                }
+
             }
         });
-        
-        
+
         setLocationRelativeTo(null);//posiciona no meio da tela
         setVisible(true);//faz a janela ficar visível
 
