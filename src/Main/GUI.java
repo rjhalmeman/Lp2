@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +25,11 @@ public class GUI extends JFrame {
     private final JPanel pnSul = new JPanel();
 
     private final JLabel lbData = new JLabel("Data");
-      DateTextField tfDataInicial = new DateTextField();
+    
+    
+    //para usar o DateTextField tem que adicionar ao projeto a classe DateTextField.java (basta copiar essa classe de outro projeto)
+    DateTextField tfDataInicial = new DateTextField();
+    
     private final JButton btVai = new JButton("=>");
     private final JTextField tfDataFinal = new JTextField(10);
 
@@ -53,7 +55,7 @@ public class GUI extends JFrame {
         pnNorte.add(btVai);
         pnNorte.add(tfDataFinal);
 
-        setTitle("GUI Básica - guib");
+        setTitle("Exemplo com DATE");
         setSize(500, 200);
 
         btVai.addActionListener(new ActionListener() {
