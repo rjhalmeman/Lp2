@@ -57,7 +57,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(600, 400);
-        setTitle("CRUD Trabalhador - V5");
+        setTitle("CRUD Canguru - V6");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
