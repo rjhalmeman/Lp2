@@ -76,7 +76,7 @@ public class ManipulaArquivo {
             FileWriter arquivo = new FileWriter(caminho);
             BufferedWriter conteudoDoArquivo = new BufferedWriter(arquivo);
             for (int i = 0; i < texto.size(); i++) {
-                conteudoDoArquivo.write(texto.get(i));//+ System.getProperty("line.separator")); // 
+                conteudoDoArquivo.write(texto.get(i) + System.getProperty("line.separator")); // 
             }
             conteudoDoArquivo.close();
         } catch (Exception e) {//Catch exception if any
