@@ -55,7 +55,7 @@ public class Trabalhador {
 
     @Override
     public String toString() {
-        return "Trabalhador{" + "cpf=" + cpf + ", nome=" + nome + ", salario=" + salario + ", aposentado=" + aposentado + '}';
+        return cpf + ";" + nome + ";" + salario + ";" + aposentado;
     }
 
 }

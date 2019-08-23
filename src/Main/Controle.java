@@ -9,12 +9,16 @@ import java.util.List;
  */
 public class Controle {
 
-    List<Trabalhador> lista = new ArrayList<>();
+    private List<Trabalhador> lista = new ArrayList<>();
 
     public Controle() { //esse construtor é usado para adicionar alguns dados na lista e 
-      
+
     }
 
+    public void limparLista(){
+        lista.clear();//zera a lista
+    }
+    
     public void adicionar(Trabalhador trabalhador) {
         lista.add(trabalhador);
     }

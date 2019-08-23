@@ -5,6 +5,9 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -16,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import tools.ManipulaArquivo;
 
 /**
  *
@@ -39,6 +43,8 @@ public class GUI extends JFrame {
     private JButton btExcluir = new JButton("Excluir");
     private JButton btSalvar = new JButton("Salvar");
     private JButton btCancelar = new JButton("Cancelar");
+    private JButton btCarregarDados = new JButton("Carregar");
+    private JButton btGravar = new JButton("Gravar");
     private JToolBar toolBar = new JToolBar();
     private JPanel painelNorte = new JPanel();
     private JPanel painelCentro = new JPanel();
@@ -53,6 +59,8 @@ public class GUI extends JFrame {
     private Trabalhador trabalhador = new Trabalhador();
 
     public GUI() {
+
+        String caminhoENomeDoArquivo = "DadosTrabalhador.csv";
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -92,6 +100,7 @@ public class GUI extends JFrame {
         toolBar.add(btExcluir);
         toolBar.add(btSalvar);
         toolBar.add(btCancelar);
+       
 
         btAdicionar.setVisible(false);
         btAlterar.setVisible(false);
@@ -103,6 +112,36 @@ public class GUI extends JFrame {
         tfSalario.setEditable(false);//atributos começam bloqueados
         cbAposentado.setEnabled(false);
         texto.setEditable(false);
+
+        btCarregarDados.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManipulaArquivo manipulaArquivo = new ManipulaArquivo(); //classe para facilitar o trabalho com arquivos
+                if (manipulaArquivo.existeOArquivo(caminhoENomeDoArquivo)) { //só dá para carregar dados se o arquivo existir
+                    String aux[];
+                    Trabalhador t;
+                    List<String> listaStringCsv = manipulaArquivo.abrirArquivo(caminhoENomeDoArquivo);//traz os dados em formato string
+                    for (String linha : listaStringCsv) {//para cada linha da lista
+                        aux = linha.split(";");//divida os campos nos ;
+                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3]));//crie um objeto Trabalhador e preencha com dados.
+                        controle.adicionar(t); //adicione na lista
+                    }
+                }
+            }
+        });
+
+        btGravar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //1) converter de uma list<trabalhador> para list<string>
+                List<Trabalhador> listaTrabalhador = controle.listar();//obtem a lista toda
+                List<String> listaTrabalhadorEmFormatoStringCSV = new ArrayList<>();
+                for (Trabalhador t : listaTrabalhador) { //percorre toda a lista de trabalhadores
+                    listaTrabalhadorEmFormatoStringCSV.add(t.toString());//para cada trabalhador t, transforme em string.
+                }
+                new ManipulaArquivo().salvarArquivo(caminhoENomeDoArquivo, listaTrabalhadorEmFormatoStringCSV);
+            }
+        });
 
         btBuscar.addActionListener(new ActionListener() {
             @Override
@@ -276,8 +315,21 @@ public class GUI extends JFrame {
                 btAdicionar.setVisible(false);
             }
         });
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //antes de sair, salvar a lista em disco
+                btGravar.doClick();
+                // Sai da classe
+                dispose();
+            }
+        });
+        
         setVisible(true);
 
+        //depois que a tela ficou visível, clic o botão automaticamente.
+        btCarregarDados.doClick();//execute o listener do btCarregarDados
     }
 
 }
