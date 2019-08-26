@@ -1,6 +1,7 @@
 package Main;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,9 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.table.DefaultTableModel;
 import tools.ManipulaArquivo;
 
 /**
@@ -50,13 +53,24 @@ public class GUI extends JFrame {
     private JPanel painelCentro = new JPanel();
     private JPanel painelSul = new JPanel();
     private JTextArea texto = new JTextArea();
-    private JScrollPane scroll = new JScrollPane();
+    private JScrollPane scrollTexto = new JScrollPane();
+    private JScrollPane scrollTabela = new JScrollPane();
 
     private String acao = "";
     private String chavePrimaria = "";
 
     private Controle controle = new Controle();
     private Trabalhador trabalhador = new Trabalhador();
+
+    String[] colunas = new String[]{"Id", "Nome", "Endereço", "Aposentado"};
+    String[][] dados = new String[0][4];
+
+    DefaultTableModel model = new DefaultTableModel(dados, colunas);
+    JTable tabela = new JTable(model);
+
+    private JPanel painel1 = new JPanel(new GridLayout(1, 1));
+    private JPanel painel2 = new JPanel(new GridLayout(1, 1));
+    private CardLayout cardLayout;
 
     public GUI() {
 
@@ -65,7 +79,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(600, 400);
-        setTitle("CRUD Canguru - V6");
+        setTitle("CRUD Canguru - V6b");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
@@ -75,10 +89,17 @@ public class GUI extends JFrame {
         cp.add(painelCentro, BorderLayout.CENTER);
         cp.add(painelSul, BorderLayout.SOUTH);
 
-        painelSul.setLayout(new GridLayout(1, 1));
-        texto.setText("\n\n\n\n\n");//5 linhas de tamanho
-        scroll.setViewportView(texto);
-        painelSul.add(scroll);
+        cardLayout = new CardLayout();
+        painelSul.setLayout(cardLayout);
+
+        painel1.add(scrollTexto);
+        painel2.add(scrollTabela);
+
+        texto.setText("\n\n\n\n\n\n");//5 linhas de tamanho
+        scrollTexto.setViewportView(texto);
+
+        painelSul.add(painel1, "Avisos");
+        painelSul.add(painel2, "Listagem");
 
         painelNorte.setLayout(new GridLayout(1, 1));
         painelNorte.add(toolBar);
@@ -100,7 +121,6 @@ public class GUI extends JFrame {
         toolBar.add(btExcluir);
         toolBar.add(btSalvar);
         toolBar.add(btCancelar);
-       
 
         btAdicionar.setVisible(false);
         btAlterar.setVisible(false);
@@ -126,6 +146,7 @@ public class GUI extends JFrame {
                         t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3]));//crie um objeto Trabalhador e preencha com dados.
                         controle.adicionar(t); //adicione na lista
                     }
+                    cardLayout.show(painelSul, "Listagem");
                 }
             }
         });
@@ -147,6 +168,9 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 btAdicionar.setVisible(false);
+
+                cardLayout.show(painelSul, "Avisos");
+                scrollTexto.setViewportView(texto);
                 if (tfCpf.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(cp, "CPF nâo pode ser vazio");
                     tfCpf.requestFocus();
@@ -304,18 +328,35 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<Trabalhador> lt = controle.listar();
-                texto.setText("Id - Nome - Salário - Aposentado\n");//limpa o textArea
+
+//                String[] colunas = {"Id", "Nome", "Salário"};
+//                Object[][] dados = {
+//                    {"Ana Monteiro", "48 9923-7898", "ana.monteiro@gmail.com"},
+//                    {"João da Silva", "48 8890-3345", "joaosilva@hotmail.com"},
+//                    {"Pedro Cascaes", "48 9870-5634", "pedrinho@gmail.com"}
+//                };
+                String[] colunas = {"Id", "Nome", "Salário", "Aposentado"};
+
+                Object[][] dados = new Object[lt.size()][colunas.length];
+                String aux[];
                 for (int i = 0; i < lt.size(); i++) {
-                    texto.append(lt.get(i).getCpf() + "-"
-                            + lt.get(i).getNome() + "-"
-                            + lt.get(i).getSalario() + " - " + (lt.get(i).isAposentado() ? "Sim" : "Não") + "\n");
+                    aux = lt.get(i).toString().split(";");
+                    for (int j = 0; j < colunas.length; j++) {
+                        dados[i][j] = aux[j];
+                    }
                 }
+                cardLayout.show(painelSul, "Listagem");
+                scrollTabela.setPreferredSize(tabela.getPreferredSize());
+                painel2.add(scrollTabela);
+                scrollTabela.setViewportView(tabela);
+                model.setDataVector(dados, colunas);
+
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
                 btAdicionar.setVisible(false);
             }
         });
-        
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -325,7 +366,7 @@ public class GUI extends JFrame {
                 dispose();
             }
         });
-        
+
         setVisible(true);
 
         //depois que a tela ficou visível, clic o botão automaticamente.
