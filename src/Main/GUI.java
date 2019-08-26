@@ -79,7 +79,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(600, 400);
-        setTitle("CRUD Canguru - V6b");
+        setTitle("CRUD Canguru - V6a");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
@@ -100,6 +100,7 @@ public class GUI extends JFrame {
 
         painelSul.add(painel1, "Avisos");
         painelSul.add(painel2, "Listagem");
+        tabela.setEnabled(false);
 
         painelNorte.setLayout(new GridLayout(1, 1));
         painelNorte.add(toolBar);
@@ -143,7 +144,7 @@ public class GUI extends JFrame {
                     List<String> listaStringCsv = manipulaArquivo.abrirArquivo(caminhoENomeDoArquivo);//traz os dados em formato string
                     for (String linha : listaStringCsv) {//para cada linha da lista
                         aux = linha.split(";");//divida os campos nos ;
-                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3]));//crie um objeto Trabalhador e preencha com dados.
+                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3].equals("Sim")?true:false));//crie um objeto Trabalhador e preencha com dados.
                         controle.adicionar(t); //adicione na lista
                     }
                     cardLayout.show(painelSul, "Listagem");
@@ -161,6 +162,7 @@ public class GUI extends JFrame {
                     listaTrabalhadorEmFormatoStringCSV.add(t.toString());//para cada trabalhador t, transforme em string.
                 }
                 new ManipulaArquivo().salvarArquivo(caminhoENomeDoArquivo, listaTrabalhadorEmFormatoStringCSV);
+                System.out.println("gravou");
             }
         });
 
