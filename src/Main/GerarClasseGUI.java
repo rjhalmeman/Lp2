@@ -1,21 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Main;
 
-import java.awt.CardLayout;
-import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JToolBar;
-import javax.swing.table.DefaultTableModel;
 
 import tools.ManipulaArquivo;
 import tools.Tools;
@@ -45,7 +30,8 @@ public class GerarClasseGUI {
         String stringImports = "";
         for (int i = 0; i < atributo.size(); i++) {
             if (atributo.get(i).contains("Date")) {
-                stringImports = "import java.util.Date;\n\n";
+                stringImports = "import java.util.Date;\n"
+                        + "import tools.DateTextField;\n";
             }
         }
 
@@ -122,16 +108,24 @@ public class GerarClasseGUI {
 //        for (int i = 0; i < atributo.size(); i++) {
 //            String aux[] = atributo.get(i).split(";");
 //            }
-        codigo.add("String[][] dados = new String[0]" + "[" + atributo.size() + "]" + ";");
+        codigo.add("String[][] dados = new String[0]" + "[" + atributo.size() + "]" + ";\n\n");
 
-//        
+//     String [] colunas = {"id","nome","altura","dataNasc"};    
+        String x = "";
+        for (int i = 0; i < atributo.size(); i++) {
+            String aux[] = atributo.get(i).split(";");          
+                x +="\""+aux[1]+"\"" + ",";
+        }
+        x = x.substring(0, x.length() - 1);
+        codigo.add("String [] colunas = {"+x+"};\n");
+
         codigo.add("\n "
-                + "DefaultTableModel model = new DefaultTableModel(dados, colunas);");
+                + "DefaultTableModel model = new DefaultTableModel(dados, colunas);\n");
 
-        codigo.add("JTable tabela = new JTable(model);");
-        codigo.add("private JPanel painel1 = new JPanel(new GridLayout(1, 1));");
-        codigo.add("private JPanel painel2 = new JPanel(new GridLayout(1, 1));");
-        codigo.add("\n private CardLayout cardLayout;");
+        codigo.add("JTable tabela = new JTable(model);\n");
+        codigo.add("private JPanel painel1 = new JPanel(new GridLayout(1, 1));\n");
+        codigo.add("private JPanel painel2 = new JPanel(new GridLayout(1, 1));\n");
+        codigo.add("\n private CardLayout cardLayout;\n");
 
         codigo.add("public " + nomeDaClasse + "GUI(){ \n"
                 + "\n"

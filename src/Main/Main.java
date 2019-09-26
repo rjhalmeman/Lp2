@@ -19,17 +19,17 @@ public class Main {
         String nomeDaClasse = "Pessoa";
         List<String> atributo = new ArrayList<>();
         List<String> codigo = new ArrayList<>();
-        atributo.add("String;id");
+        atributo.add("int;id");
         atributo.add("String;nome");
         atributo.add("double;altura");
-        atributo.add("String;esporte");
-        atributo.add("double;peso");
-        atributo.add("Date;dataNascimento");
+        atributo.add("Date;dataNasc");
 
         GerarClasseMain gerarClasseMain = new GerarClasseMain(nomeDaClasse, projetoDestino);
-        GerarClasseEntidade gerarClasseEntidade = new GerarClasseEntidade(nomeDaClasse, atributo, codigo, projetoDestino);
+        GerarClasseEntidade gerarClasseEntidade = 
+                new GerarClasseEntidade(nomeDaClasse, atributo, codigo, projetoDestino);
         codigo.clear();
-        GerarClasseControle gerarClasseControle = new GerarClasseControle(nomeDaClasse, atributo, codigo, projetoDestino);
+        GerarClasseControle gerarClasseControle = 
+                new GerarClasseControle(nomeDaClasse, atributo, codigo, projetoDestino);
         codigo.clear();
         GerarClasseGUI gerarClasseGUI = new GerarClasseGUI(nomeDaClasse, atributo, codigo, projetoDestino);
 

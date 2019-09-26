@@ -1,7 +1,7 @@
-
 package Main;
+
 public class Atleta {
-    
+
     private int id;
     private String nome;
     private double altura;
@@ -48,7 +48,5 @@ public class Atleta {
     public void setAltura(double altura) {
         this.altura = altura;
     }
-    
-    
-    
+
 }
