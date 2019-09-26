@@ -16,7 +16,8 @@ public class GerarClasseEntidade {
     List<String> codigo;
     Tools st = new Tools();
 
-    public GerarClasseEntidade(String nomeDaClasse, List<String> atributo, List<String> codigo, String projetoDestino) {
+    public GerarClasseEntidade(String nomeDaClasse, List<String> atributo,
+            List<String> codigo, String projetoDestino) {
         this.nomeDaClasse = nomeDaClasse;
         this.atributo = atributo;
         this.codigo = codigo;
@@ -25,10 +26,12 @@ public class GerarClasseEntidade {
         String stringImports = "";
         for (int i = 0; i < atributo.size(); i++) {
             if (atributo.get(i).contains("Date")) {
-                stringImports = "import java.util.Date;\n\n";
+                stringImports = "import java.util.Date;\n"
+                        + "import java.text.SimpleDateFormat;\n";
+                break;
             }
         }
-        
+
         codigo.add("package Main;\n"
                 + stringImports
                 + "public class " + nomeDaClasse + " {");
@@ -41,7 +44,6 @@ public class GerarClasseEntidade {
                 + " public " + nomeDaClasse + "() {\n"
                 + "    }");
 
-        
         codigo.add("\n"
                 + " public " + nomeDaClasse + "( "
                 + "    ");
@@ -65,16 +67,21 @@ public class GerarClasseEntidade {
             codigo.add("public " + aux[0] + " get" + st.primeiraLetraMaiscula(aux[1]) + "(){\nreturn " + aux[1] + ";\n }");
             codigo.add("public void " + " set" + st.primeiraLetraMaiscula(aux[1]) + "(" + aux[0] + "  " + aux[1] + ") {\n this." + aux[1] + " = " + aux[1] + ";\n }");
         }
+
         String x = "";
         for (int i = 0; i < atributo.size(); i++) {
             String aux[] = atributo.get(i).split(";");
-            x += aux[1] + "+\";\"+";
+            if (aux[0].equals("Date")) {
+                x += "new SimpleDateFormat(\"dd/MM/yyyy\").format("+aux[1]+ ")+\";\"+";
+            } else {
+                x += aux[1] + "+\";\"+";
+            }
 
         }
-        x = x.substring(0,x.length()-5);
+        x = x.substring(0, x.length() - 5);
         codigo.add("@Override\n"
                 + "    public String toString() {");
-        codigo.add("return " + x +";");
+        codigo.add("return " + x + ";");
 
         codigo.add("}\n}");
 
