@@ -113,11 +113,11 @@ public class GerarClasseGUI {
 //     String [] colunas = {"id","nome","altura","dataNasc"};    
         String x = "";
         for (int i = 0; i < atributo.size(); i++) {
-            String aux[] = atributo.get(i).split(";");          
-                x +="\""+aux[1]+"\"" + ",";
+            String aux[] = atributo.get(i).split(";");
+            x += "\"" + aux[1] + "\"" + ",";
         }
         x = x.substring(0, x.length() - 1);
-        codigo.add("String [] colunas = {"+x+"};\n");
+        codigo.add("String [] colunas = {" + x + "};\n");
 
         codigo.add("\n "
                 + "DefaultTableModel model = new DefaultTableModel(dados, colunas);\n");
@@ -132,7 +132,7 @@ public class GerarClasseGUI {
                 + "String caminhoENomeDoArquivo = " + "\"" + "\"" + ";"
                 + "\nsetDefaultCloseOperation(DISPOSE_ON_CLOSE);"
                 + "setSize(600, 400); \n"
-                + "setTitle(\"CRUD Canguru - V6a\"); \n"
+                + "setTitle(\"CRUD  " + nomeDaClasse + " - V001\"); \n"
                 + "setLocationRelativeTo(null);  \n");
 
         codigo.add("cp = getContentPane(); \n"
@@ -156,7 +156,7 @@ public class GerarClasseGUI {
                 + "painelNorte.setLayout(new GridLayout(1, 1)); \n"
                 + "painelCentro.setLayout(new GridLayout(3, 2)); \n");
 
-        for (int i = 0; i < atributo.size(); i++) {
+        for (int i = 1; i < atributo.size(); i++) {
             String aux[] = atributo.get(i).split(";");
             if (aux[0].equals("boolean")) {
                 codigo.add("painelCentro.add(cb" + t.primeiraLetraMaiscula(aux[1]) + ");");
@@ -169,7 +169,9 @@ public class GerarClasseGUI {
 
         }
         String aux[] = atributo.get(0).split(";");
-        codigo.add("toolBar.add(" + "tf" + t.primeiraLetraMaiscula(aux[1]) + "); \n"
+        codigo.add(""
+                + "toolBar.add(" + "lb" + t.primeiraLetraMaiscula(aux[1]) + "); \n"
+                + "toolBar.add(" + "tf" + t.primeiraLetraMaiscula(aux[1]) + "); \n"
                 + "toolBar.add(btAdicionar); \n"
                 + " toolBar.add(btBuscar); \n"
                 + "toolBar.add(btListar); \n"
@@ -183,7 +185,7 @@ public class GerarClasseGUI {
                 + "btExcluir.setVisible(false); \n"
                 + "btSalvar.setVisible(false); \n");
 
-        for (int i = 0; i < atributo.size(); i++) {
+        for (int i = 1; i < atributo.size(); i++) {
             String auxx[] = atributo.get(i).split(";");
             if (auxx[0].equals("boolean")) {
                 codigo.add("cb" + t.primeiraLetraMaiscula(auxx[1]) + ".setEnabled" + "(false)" + "; \n");
@@ -245,11 +247,21 @@ public class GerarClasseGUI {
                 + "                }\n"
                 + "            }\n"
                 + "        });");
-        codigo.add("}\n");
+
+        codigo.add("\n\n addWindowListener(new WindowAdapter() {\n"
+                + "            @Override\n"
+                + "            public void windowClosing(WindowEvent e) {\n"
+                + "                //antes de sair, salvar a lista em disco\n"
+                + "                btGravar.doClick();\n"
+                + "                // Sai da classe\n"
+                + "                dispose();\n"
+                + "            }\n"
+                + "        });\n"
+                + "\n"
+                + "        setVisible(true);");
         
         
-        
-        
+        codigo.add("}\n // fim do construtor principal");
         codigo.add("\n}//fim da classe");
 
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
