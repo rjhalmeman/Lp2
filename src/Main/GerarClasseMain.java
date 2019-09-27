@@ -28,8 +28,7 @@ public class GerarClasseMain {
 
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
         manipulaArquivo.salvarArquivo(projetoDestino + "/src/Main/Main.java", codigo);//adicionou a classe attlea no pacote cobaia
-        //manipulaArquivo.salvarArquivo("/home/todos/alunos/cm/a1903853/NetBeansProjects/Cobaia/src/Main/Main.java", codigo);//adicionou a classe attlea no pacote cobaia
-
+       
     }
 
 }

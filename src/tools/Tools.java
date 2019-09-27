@@ -22,7 +22,7 @@ public class Tools {
         try {
             return simpleDateFormat.format(data); //converte a data para string
         } catch (Exception e) {
-            return null;//se algo estiver errado na data, retorne null
+            return   null;//se algo estiver errado na data, retorne null
             //tem que tratar o erro na classe que chamou
         }
     }

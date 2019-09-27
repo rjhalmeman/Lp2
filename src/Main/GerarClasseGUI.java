@@ -196,7 +196,11 @@ public class GerarClasseGUI {
         }
         codigo.add("texto.setEditable(false);");
         String auxx[] = atributo.get(0).split(";");
-
+        String tipo = auxx[1];
+        if (auxx[0].equals("int")) {
+            tipo = "Integer";
+        }
+        codigo.add("\n\n //-------------------botao buscar----------------\n");
         codigo.add("btBuscar.addActionListener(new ActionListener() {\n"
                 + "            @Override\n"
                 + "            public void actionPerformed(ActionEvent e) {\n"
@@ -207,7 +211,7 @@ public class GerarClasseGUI {
                 + "                    tf" + st.primeiraLetraMaiscula(auxx[1]) + ".selectAll();\n"
                 + "                } else {\n"
                 + "                    chavePrimaria = tf" + st.primeiraLetraMaiscula(auxx[1]) + ".getText();//para uso no adicionar\n"
-                + "                    " + nomeDaClasseMinuscula + " = controle.buscar(" + st.primeiraLetraMaiscula(auxx[0]) + ".valueOf(tf" + st.primeiraLetraMaiscula(auxx[1]) + ".getText()));\n"
+                + "                    " + nomeDaClasseMinuscula + " = controle.buscar(" + st.primeiraLetraMaiscula(tipo) + ".valueOf(tf" + st.primeiraLetraMaiscula(auxx[1]) + ".getText()));\n"
                 + "                    if (" + nomeDaClasseMinuscula + " == null) {//nao encontrou\n"
                 + "                        btAdicionar.setVisible(true);\n"
                 + "                        btAlterar.setVisible(false);\n"
@@ -232,7 +236,7 @@ public class GerarClasseGUI {
                 + "                        "
         );
         for (int i = 1; i < atributo.size(); i++) {
-            String auxxx[] = atributo.get(0).split(";");
+            String auxxx[] = atributo.get(i).split(";");
             codigo.add("tf" + st.primeiraLetraMaiscula(auxxx[1]) + ".setEditable(false);\n");
 
         }
@@ -241,6 +245,12 @@ public class GerarClasseGUI {
                 + "                }\n"
                 + "            }\n"
                 + "        });");
+        codigo.add("}\n");
+        
+        
+        
+        
+        codigo.add("\n}//fim da classe");
 
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
         manipulaArquivo.salvarArquivo(projetoDestino + "/src/Main/" + nomeDaClasse + "GUI.java", codigo);
