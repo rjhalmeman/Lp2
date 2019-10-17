@@ -59,7 +59,7 @@ class Entrada {
         //ler uma resposta sim ou não do usuário
         while (true) {
             try {
-                System.out.print(msg + " (S ou N) =>");
+                System.out.print(msg + " (S ou N) ");
                 char x = teclado.next().charAt(0);
                 if (x == 's' || x == 'S') {
                     return true;

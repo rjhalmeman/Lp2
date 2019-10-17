@@ -11,7 +11,7 @@ public class GUITexto {
     Saida saida = new Saida();
     Controle controle = new Controle();
 
-    public void telaListar() {
+    public void telaList() {
         Entrada entrada = new Entrada();
         tools.clearScreen();
         System.out.println("");
@@ -25,28 +25,29 @@ public class GUITexto {
         entrada.pausaEnter();
     }
 
-    public void telaBuscar() {
+    public void telaRetrieve() {
         Entrada entrada = new Entrada();
         tools.clearScreen();
         System.out.println("");
+        System.out.println("RETRIEVE\n");
         String cpf = entrada.lerString("Digite o CPF do trabalhador");
-        Trabalhador trab = controle.buscar(cpf);
-        if (trab!=null) {
-            saida.rotuloString("CPF",trab.getCpf());
-            saida.rotuloString("Nome:",trab.getNome());
-            saida.imprimirNumeroDouble("Salário", trab.getSalario());
-        }
-        else {
+        Trabalhador trabalhador = controle.buscar(cpf);
+        if (trabalhador != null) {
+            saida.rotuloString("CPF", trabalhador.getCpf());
+            saida.rotuloString("Nome:", trabalhador.getNome());
+            saida.imprimirNumeroDouble("Salário", trabalhador.getSalario());
+            saida.rotuloString("Aposentado", trabalhador.isAposentado() ? "SIM" : "NÃO");
+        } else {
             saida.rotuloString("Não encontrou esse cpf", cpf);
         }
         entrada.pausaEnter();
     }
 
-    public void telaAdicionar() {
+    public void telaCreate() {
         Entrada entrada = new Entrada();
         tools.clearScreen();
         System.out.println("");
-        System.out.println("");
+        System.out.println("INSERT\n");
         entrada.teclado.reset();
         String cpf = entrada.lerString("Digite o CPF do trabalhador");
         Trabalhador trab = controle.buscar(cpf);
@@ -55,11 +56,58 @@ public class GUITexto {
             trabalhador.setCpf(cpf);
             trabalhador.setNome(entrada.lerString("Digite o nome"));
             trabalhador.setSalario(entrada.lerNumeroDouble("Digite o salário"));
-            trabalhador.setAposentado(false);
+            trabalhador.setAposentado(entrada.lerConfirmacao("Aposentado"));
             controle.adicionar(trabalhador);
         } else {
             System.out.println(trab);
             System.out.println("Trabalhador já cadastrado");
+            entrada.pausaEnter();
+        }
+    }
+
+    public void telaUpdate() {
+        Entrada entrada = new Entrada();
+        tools.clearScreen();
+        System.out.println("");
+        System.out.println("UPDATE\n");
+        entrada.teclado.reset();
+        String cpf = entrada.lerString("Digite o CPF do trabalhador");
+        Trabalhador trabalhador = controle.buscar(cpf);
+        if (trabalhador != null) { //achou, então pode alterar
+            Trabalhador trabalhadorAntigo = trabalhador; //guarda dados para pesquisa no controle
+            trabalhador.setCpf(cpf);
+            saida.rotuloString("Nome atual: ", trabalhador.getNome());
+            trabalhador.setNome(entrada.lerString("Digite o novo nome"));
+            saida.imprimirNumeroDouble("Salário atual", trabalhador.getSalario());
+            trabalhador.setSalario(entrada.lerNumeroDouble("Digite o novo salário"));
+            saida.rotuloString("Aposentado", trabalhador.isAposentado() ? "SIM" : "NÃO");
+            trabalhador.setAposentado(entrada.lerConfirmacao("Aposentado"));
+            controle.alterar(trabalhador, trabalhadorAntigo);
+        } else {
+            System.out.println("Trabalhador não cadastrado, impossível alterar");
+            entrada.pausaEnter();
+        }
+    }
+
+    public void telaDelete() {
+        Entrada entrada = new Entrada();
+        tools.clearScreen();
+        System.out.println("");
+        System.out.println("DELETE\n");
+        entrada.teclado.reset();
+        String cpf = entrada.lerString("Digite o CPF do trabalhador");
+        Trabalhador trabalhador = controle.buscar(cpf);
+        if (trabalhador != null) { //achou, então pode excluir
+            trabalhador.setCpf(cpf);
+            saida.rotuloString("CPF", cpf);
+            saida.rotuloString("Nome: ", trabalhador.getNome());
+            saida.imprimirNumeroDouble("Salário", trabalhador.getSalario());
+            saida.rotuloString("Aposentado", trabalhador.isAposentado() ? "SIM" : "NÃO");
+            if (entrada.lerConfirmacao("Excluir esse trabalhador?")) {
+                controle.excluir(trabalhador);
+            }
+        } else {
+            System.out.println("Trabalhador não cadastrado, exclusão impossível");
             entrada.pausaEnter();
         }
     }
@@ -69,27 +117,36 @@ public class GUITexto {
         int opcao = 0;
         while (opcao != 9) {
             tools.clearScreen();
+            System.out.println("CRUD - Trabalhador\n");
+            System.out.println("\nMenu Principal\n");
             System.out.println("1 - Adicionar");
-            System.out.println("2 - Listar");
-            System.out.println("3 - Buscar");
+            System.out.println("2 - Buscar");
+            System.out.println("3 - Alterar");
+            System.out.println("4 - Deletar");
+            System.out.println("5 - Listar");
             System.out.println("9 - Sair");
 
             opcao = entrada.lerNumeroInteiro("Qual a opção");
 
             switch (opcao) {
                 case 1:
-                    telaAdicionar();
+                    telaCreate();
                     break;
                 case 2:
-                    telaListar();
-
+                    telaRetrieve();
                     break;
                 case 3:
-                    telaBuscar();
+                    telaUpdate();
+                    break;
+                case 4:
+                    telaDelete();
+                    break;
+                case 5:
+                    telaList();
                     break;
 
                 case 9:
-                    System.out.println("Bye");
+                    System.out.println("\n\nBye");
 
                     break;
 
