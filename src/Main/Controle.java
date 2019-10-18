@@ -2,6 +2,7 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.List;
+import tools.ManipulaArquivo;
 
 /**
  *
@@ -15,10 +16,10 @@ public class Controle {
 
     }
 
-    public void limparLista(){
+    public void limparLista() {
         lista.clear();//zera a lista
     }
-    
+
     public void adicionar(Trabalhador trabalhador) {
         lista.add(trabalhador);
     }
@@ -44,6 +45,26 @@ public class Controle {
 
     public void excluir(Trabalhador trabalhador) {
         lista.remove(trabalhador);
+    }
+
+    public void gravarLista(String caminho) {
+        ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
+        List<String> listaDeString = new ArrayList<>();
+        for (Trabalhador trabalhador : lista) {
+            listaDeString.add(trabalhador.toString());
+        }
+        manipulaArquivo.salvarArquivo(caminho, listaDeString);
+    }
+
+    void carregarDados(String caminho) {
+       List<String> listaDeString = new  ManipulaArquivo().abrirArquivo(caminho);
+       //converter de CSV para Trabalhador
+        Trabalhador trabalhador;
+        for (String string : listaDeString) {
+            String aux[] = string.split(";");
+            trabalhador = new Trabalhador(aux[0],aux[1],Double.valueOf(aux[2]),(aux[3].equals("Sim")?true:false));
+            lista.add(trabalhador);            
+        }
     }
 
 }
