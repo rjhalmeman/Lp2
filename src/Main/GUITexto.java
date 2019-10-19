@@ -10,6 +10,8 @@ public class GUITexto {
 
     Saida saida = new Saida();
     Controle controle = new Controle();
+    
+  
 
     public void telaList() {
         Entrada entrada = new Entrada();
@@ -114,6 +116,11 @@ public class GUITexto {
 
     public GUITexto() {
         Entrada entrada = new Entrada();
+        String caminho = "Trabalhador.csv";
+        //carregar dados do HD para memória RAM
+        controle.carregarDados(caminho);
+        
+        
         int opcao = 0;
         while (opcao != 9) {
             tools.clearScreen();
@@ -144,8 +151,9 @@ public class GUITexto {
                 case 5:
                     telaList();
                     break;
-
                 case 9:
+                    //antes de sair, transferir para o HD
+                    controle.gravarLista(caminho);
                     System.out.println("\n\nBye");
 
                     break;

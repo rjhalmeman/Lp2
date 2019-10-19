@@ -57,15 +57,18 @@ public class Controle {
     }
 
     void carregarDados(String caminho) {
-        
-        
-       List<String> listaDeString = new  ManipulaArquivo().abrirArquivo(caminho);
-       //converter de CSV para Trabalhador
+        ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
+        if (!manipulaArquivo.existeOArquivo(caminho)) {
+            manipulaArquivo.criarArquivoVazio(caminho);
+        }
+
+        List<String> listaDeString = manipulaArquivo.abrirArquivo(caminho);
+        //converter de CSV para Trabalhador
         Trabalhador trabalhador;
         for (String string : listaDeString) {
             String aux[] = string.split(";");
-            trabalhador = new Trabalhador(aux[0],aux[1],Double.valueOf(aux[2]),(aux[3].equals("Sim")?true:false));
-            lista.add(trabalhador);            
+            trabalhador = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), (aux[3].equals("Sim") ? true : false));
+            lista.add(trabalhador);
         }
     }
 
