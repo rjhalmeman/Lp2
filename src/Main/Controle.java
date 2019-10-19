@@ -57,6 +57,8 @@ public class Controle {
     }
 
     void carregarDados(String caminho) {
+        
+        
        List<String> listaDeString = new  ManipulaArquivo().abrirArquivo(caminho);
        //converter de CSV para Trabalhador
         Trabalhador trabalhador;
