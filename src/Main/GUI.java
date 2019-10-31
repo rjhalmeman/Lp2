@@ -144,7 +144,7 @@ public class GUI extends JFrame {
                     List<String> listaStringCsv = manipulaArquivo.abrirArquivo(caminhoENomeDoArquivo);//traz os dados em formato string
                     for (String linha : listaStringCsv) {//para cada linha da lista
                         aux = linha.split(";");//divida os campos nos ;
-                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3].equals("Sim")?true:false));//crie um objeto Trabalhador e preencha com dados.
+                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3].equals("true")?true:false));//crie um objeto Trabalhador e preencha com dados.
                         controle.adicionar(t); //adicione na lista
                     }
                     cardLayout.show(painelSul, "Listagem");
