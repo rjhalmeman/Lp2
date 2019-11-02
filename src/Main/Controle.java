@@ -15,10 +15,10 @@ public class Controle {
 
     }
 
-    public void limparLista(){
+    public void limparLista() {
         lista.clear();//zera a lista
     }
-    
+
     public void adicionar(Trabalhador trabalhador) {
         lista.add(trabalhador);
     }
@@ -44,6 +44,14 @@ public class Controle {
 
     public void excluir(Trabalhador trabalhador) {
         lista.remove(trabalhador);
+    }
+
+    List<String> listStrings() {
+        List<String> ls = new ArrayList<>();
+        for (Trabalhador t : lista) {
+            ls.add(t.toString());
+        }
+        return ls;
     }
 
 }

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -22,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
+import tools.JanelaPesquisar;
 import tools.ManipulaArquivo;
 
 /**
@@ -42,6 +44,7 @@ public class GUI extends JFrame {
     private JButton btAdicionar = new JButton("Adicionar");
     private JButton btListar = new JButton("Listar");
     private JButton btBuscar = new JButton("Buscar");
+    private JButton btLocalizar = new JButton("Localizar");
     private JButton btAlterar = new JButton("Alterar");
     private JButton btExcluir = new JButton("Excluir");
     private JButton btSalvar = new JButton("Salvar");
@@ -79,7 +82,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(600, 400);
-        setTitle("CRUD Canguru - V6a");
+        setTitle("CRUD Canguru - V7 - Janela Pesquisar");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
@@ -117,6 +120,7 @@ public class GUI extends JFrame {
         toolBar.add(tfCpf);
         toolBar.add(btAdicionar);
         toolBar.add(btBuscar);
+        toolBar.add(btLocalizar);
         toolBar.add(btListar);
         toolBar.add(btAlterar);
         toolBar.add(btExcluir);
@@ -144,7 +148,7 @@ public class GUI extends JFrame {
                     List<String> listaStringCsv = manipulaArquivo.abrirArquivo(caminhoENomeDoArquivo);//traz os dados em formato string
                     for (String linha : listaStringCsv) {//para cada linha da lista
                         aux = linha.split(";");//divida os campos nos ;
-                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3].equals("true")?true:false));//crie um objeto Trabalhador e preencha com dados.
+                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3].equals("true") ? true : false));//crie um objeto Trabalhador e preencha com dados.
                         controle.adicionar(t); //adicione na lista
                     }
                     cardLayout.show(painelSul, "Listagem");
@@ -166,6 +170,28 @@ public class GUI extends JFrame {
             }
         });
 
+        btLocalizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> listaAuxiliar = controle.listStrings();
+                if (listaAuxiliar.size() > 0) {
+                    Point lc = btLocalizar.getLocationOnScreen();
+                    lc.x = lc.x + btLocalizar.getWidth();
+                    String selectedItem = new JanelaPesquisar(listaAuxiliar,
+                            lc.x,
+                            lc.y).getValorRetornado();
+                    if (!selectedItem.equals("")) {
+                        String[] aux = selectedItem.split(";");
+                        tfCpf.setText(aux[0]);
+                        btBuscar.doClick();
+                    } else {
+                        tfCpf.requestFocus();
+                        tfCpf.selectAll();
+                    }
+                }
+            }
+        });
+
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -174,9 +200,12 @@ public class GUI extends JFrame {
                 cardLayout.show(painelSul, "Avisos");
                 scrollTexto.setViewportView(texto);
                 if (tfCpf.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(cp, "CPF nâo pode ser vazio");
+                    trabalhador = new Trabalhador();
+                    tfCpf.setText(tfCpf.getText().trim());//caso tenham sido digitados espaços
+
                     tfCpf.requestFocus();
                     tfCpf.selectAll();
+
                 } else {
                     chavePrimaria = tfCpf.getText();//para uso no adicionar
                     trabalhador = controle.buscar(tfCpf.getText());
@@ -214,6 +243,7 @@ public class GUI extends JFrame {
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
                 btBuscar.setVisible(false);
+                btLocalizar.setVisible(false);
                 btListar.setVisible(false);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
@@ -236,6 +266,7 @@ public class GUI extends JFrame {
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
                 btBuscar.setVisible(false);
+                btLocalizar.setVisible(false);
                 btListar.setVisible(false);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
