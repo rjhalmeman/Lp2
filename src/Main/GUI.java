@@ -24,6 +24,7 @@ public class GUI extends JFrame {
     JLabel labelAviso = new JLabel();
     JButton buttonAutoSelecione = new JButton("Selecione no comboBox o [dois]");
     JButton buttonCapturar = new JButton("Capture o valor que está selecionado no comboBox");
+    JButton buttonEnviarParaLista = new JButton("EnviarParaLista");
     JComboBox comboBox = new JComboBox();
     Container cp;
 
@@ -31,7 +32,7 @@ public class GUI extends JFrame {
         setTitle("ComboBox");
         setSize(300, 200);//tamanho da janela
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//libera ao sair (tira da memória a classe
-        setLayout(new GridLayout(4, 1));//informa qual gerenciador de layout será usado
+        setLayout(new GridLayout(5, 1));//informa qual gerenciador de layout será usado
         setBackground(Color.CYAN);//cor do fundo da janela
         cp = getContentPane();//container principal, para adicionar nele os outros componentes
 
@@ -43,6 +44,7 @@ public class GUI extends JFrame {
         cp.add(comboBox);
         cp.add(buttonAutoSelecione);
         cp.add(buttonCapturar);
+        cp.add(buttonEnviarParaLista);
         painelAviso.add(labelAviso);
         cp.add(painelAviso);
         labelAviso.setOpaque(true);
@@ -50,6 +52,22 @@ public class GUI extends JFrame {
         setLocationRelativeTo(null); // posiciona no centro da tela principal
         setVisible(true);//faz a janela ficar visível
 
+        buttonEnviarParaLista.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Filme filme = new Filme();
+                filme.setId(1);
+                filme.setNome((String)comboBox.getSelectedItem());
+                
+                System.out.println("Filme =>"+filme.toString());
+                
+                
+                
+                
+            }
+        });
+        
+        
         buttonAutoSelecione.addActionListener(new ActionListener() {
 
             @Override
