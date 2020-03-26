@@ -53,16 +53,21 @@ class GUI extends JFrame {
         btCalcular.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int idade = Integer.valueOf(tfIdade.getText());
-
-                if (idade < 5) {
-                    tfCategoria.setText("erro - idade < 5");
-                } else if (idade > 120) {
-                    tfCategoria.setText("Velho demais...");
-                } else {
-                    Processamento processamento = new Processamento(idade);
-                    tfCategoria.setText(processamento.getCategoria());
+                int idade = 0;
+                try {
+                    idade = Integer.valueOf(tfIdade.getText());
+                    if (idade < 5) {
+                        tfCategoria.setText("erro - idade < 5");
+                    } else if (idade > 120) {
+                        tfCategoria.setText("Velho demais...");
+                    } else {
+                        Processamento processamento = new Processamento(idade);
+                        tfCategoria.setText(processamento.getCategoria());
+                    }
+                } catch (Exception erro) {
+                    tfCategoria.setText("Erro na entrada de dados");
                 }
+
             }
         });
 
