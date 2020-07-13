@@ -10,8 +10,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-       GUITexto gui = new GUITexto();
+        GUI gui = new GUI(); 
+       //UITexto gui = new UITexto();
     }
 
 }

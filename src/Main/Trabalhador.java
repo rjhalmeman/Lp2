@@ -6,7 +6,7 @@ package Main;
  */
 public class Trabalhador {
 
-    private String cpf;
+    private String cpf;//pk
     private String nome;
     private double salario;
     private boolean aposentado;
@@ -25,8 +25,16 @@ public class Trabalhador {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public String setCpf(String cpf) {
+        try {
+            if (cpf.trim().equals("")) {
+               return null; 
+            }
+            this.cpf = cpf;
+        } catch (Exception e) {
+            return null;
+        }
+        return cpf;
     }
 
     public String getNome() {

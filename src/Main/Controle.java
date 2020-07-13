@@ -29,11 +29,13 @@ public class Controle {
     }
 
     public Trabalhador buscar(String cpf) {
-        for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getCpf().equals(cpf)) {
-                return lista.get(i);
+        if (cpf != null) {
+            for (int i = 0; i < lista.size(); i++) {
+                if (lista.get(i).getCpf().equals(cpf)) {
+                    return lista.get(i);
+                }
             }
-        }
+        }  
         return null;
 
     }
