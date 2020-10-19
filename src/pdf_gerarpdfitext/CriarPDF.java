@@ -27,14 +27,14 @@ public class CriarPDF {
 
             // com margens 
             // Document doc = new Document(PageSize.A4, 72, 72, 72, 72);
-            document.add(new Paragraph("Primeira linha"));
+            // document.add(new Paragraph("Primeira linha"));
             Font f = new Font(FontFamily.COURIER, 20, Font.BOLD);
-            Paragraph p1 = new Paragraph("Segunda linha!", f);
+            Paragraph p1 = new Paragraph("Exemplo de criação de PDF via Java", f);
 
             p1.setAlignment(Element.ALIGN_CENTER);
             p1.setSpacingAfter(20);
             document.add(new Paragraph(p1));
-            document.add(new Paragraph("terceira linha"));
+            // document.add(new Paragraph("terceira linha"));
             document.add(new Paragraph("  "));
 
             /* 
@@ -59,7 +59,6 @@ public class CriarPDF {
 //            header.setBorder(Rectangle.AUTHOR);
 //            header.setBorder(Rectangle.BOTTOM);
 //            header.setBorder(Rectangle.LEFT);
-            
             header.setColspan(2);
             Paragraph h = new Paragraph("Lista de alunos");
             header.addElement(h);
