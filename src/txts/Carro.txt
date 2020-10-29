@@ -1,0 +1,3 @@
+String;placa;20
+String;nome;30
+Date;dataLancamento;20

@@ -1,0 +1,3 @@
+int;id;0
+String;nome;30
+Date;dataNascimento;20
