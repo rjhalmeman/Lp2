@@ -126,32 +126,35 @@ public class GUI extends JFrame {
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(pnSul, "avisos");
-                trabalhador = controle.buscar(tfPK.getText());
-                if (trabalhador != null) {//achou o trabalhador na lista
-                    //mostrar
-                    btAdicionar.setVisible(false);
-                    btAlterar.setVisible(true);
-                    btExcluir.setVisible(true);
-                    tfNome.setText(trabalhador.getNome());
-                    tfSalario.setText(String.valueOf(trabalhador.getSalario()));
-                    checkBoxAposentado.setSelected(trabalhador.isAposentado());
+                if (!tfPK.getText().isEmpty()) {
 
-                    tfNome.setEditable(false);
-                    tfSalario.setEditable(false);
-                    checkBoxAposentado.setEnabled(false);
+                    cardLayout.show(pnSul, "avisos");
+                    trabalhador = controle.buscar(tfPK.getText());
+                    if (trabalhador != null) {//achou o trabalhador na lista
+                        //mostrar
+                        btAdicionar.setVisible(false);
+                        btAlterar.setVisible(true);
+                        btExcluir.setVisible(true);
+                        tfNome.setText(trabalhador.getNome());
+                        tfSalario.setText(String.valueOf(trabalhador.getSalario()));
+                        checkBoxAposentado.setSelected(trabalhador.isAposentado());
 
-                } else {//não achou na lista
-                    //mostrar botão incluir
-                    tfNome.setText("");
-                    tfSalario.setText("");
-                    checkBoxAposentado.setSelected(false);
-                    btAdicionar.setVisible(true);
-                    tfNome.setEditable(false);
-                    tfSalario.setEditable(false);
-                    checkBoxAposentado.setEnabled(false);
-                    btAlterar.setVisible(false);
-                    btExcluir.setVisible(false);
+                        tfNome.setEditable(false);
+                        tfSalario.setEditable(false);
+                        checkBoxAposentado.setEnabled(false);
+
+                    } else {//não achou na lista
+                        //mostrar botão incluir
+                        tfNome.setText("");
+                        tfSalario.setText("");
+                        checkBoxAposentado.setSelected(false);
+                        btAdicionar.setVisible(true);
+                        tfNome.setEditable(false);
+                        tfSalario.setEditable(false);
+                        checkBoxAposentado.setEnabled(false);
+                        btAlterar.setVisible(false);
+                        btExcluir.setVisible(false);
+                    }
                 }
             }
         });
