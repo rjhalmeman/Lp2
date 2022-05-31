@@ -41,7 +41,7 @@ public class GUI extends JFrame {
 
         //muda a cor dos painéis para que possamos vê-los
         pnNorte.setBackground(Color.green);
-        pnCentro.setBackground(Color.yellow);
+        pnCentro.setBackground(Color.CYAN);
         pnSul.setBackground(Color.blue);
 
         cp = getContentPane(); //captura o painel de conteúdos
