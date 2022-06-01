@@ -11,8 +11,7 @@ public class Controle {
 
     private List<Trabalhador> lista = new ArrayList<>();
 
-    public Controle() { //esse construtor é usado para adicionar alguns dados na lista e 
-
+    public Controle() {
     }
 
     public void limparLista() {
@@ -34,12 +33,10 @@ public class Controle {
             }
         }
         return null;
-
     }
 
     public void alterar(Trabalhador trabalhador, Trabalhador trabalhadorAntigo) {
         lista.set(lista.indexOf(trabalhadorAntigo), trabalhador);
-
     }
 
     public void excluir(Trabalhador trabalhador) {

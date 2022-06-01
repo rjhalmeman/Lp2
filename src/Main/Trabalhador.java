@@ -55,7 +55,7 @@ public class Trabalhador {
 
     @Override
     public String toString() {
-        return cpf + ";" + nome + ";" + salario + ";" + aposentado;
+        return cpf + ";" + nome + ";" + salario + ";" + (aposentado?"Sim":"Não");
     }
 
 }
