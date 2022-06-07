@@ -65,11 +65,11 @@ public class GUI extends JFrame {
     private Controle controle = new Controle();
     private Trabalhador trabalhador = new Trabalhador();
 
-    String[] colunas = new String[]{"Id", "Nome", "Endereço", "Aposentado"};
-    String[][] dados = new String[0][4];
+    private String[] colunas = new String[]{"Id", "Nome", "Endereço", "Aposentado"};
+    private String[][] dados = new String[0][4];
 
-    DefaultTableModel model = new DefaultTableModel(dados, colunas);
-    JTable tabela = new JTable(model);
+    private DefaultTableModel model = new DefaultTableModel(dados, colunas);
+    private JTable tabela = new JTable(model);
 
     private JPanel painel1 = new JPanel(new GridLayout(1, 1));
     private JPanel painel2 = new JPanel(new GridLayout(1, 1));
@@ -152,8 +152,11 @@ public class GUI extends JFrame {
                         controle.adicionar(t); //adicione na lista
                     }
                     cardLayout.show(painelSul, "Listagem");
+
                 }
+
             }
+
         });
 
         btGravar.addActionListener(new ActionListener() {
