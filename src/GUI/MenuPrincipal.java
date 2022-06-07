@@ -40,7 +40,7 @@ public class MenuPrincipal extends JFrame {
             }
         });
         
-        setSize(150,200);
+        setSize(350,200);
         setLocationRelativeTo(null);
         setVisible(true);
     }

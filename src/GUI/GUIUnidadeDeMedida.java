@@ -2,8 +2,6 @@ package GUI;
 
 import Controle.ControleUnidadeDeMedida;
 import Entidade.UnidadeDeMedida;
-import static com.sun.glass.ui.Cursor.setVisible;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
