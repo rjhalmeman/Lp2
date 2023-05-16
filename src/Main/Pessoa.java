@@ -55,6 +55,6 @@ public class Pessoa {
     public String toString() {
         return "Pessoa{" + "cpf=" + cpf + ", nome=" + nome + ", sobrenome=" + sobrenome + ", dataNascimento=" + dataNascimento + '}';
     }
-    
+
     
 }

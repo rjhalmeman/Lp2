@@ -17,6 +17,7 @@ public class Controle {
 
     public Pessoa buscar(String cpf) {
         Pessoa pessoa;
+       
         for (int i = 0; i < listaPessoa.size(); i++) {
             pessoa = listaPessoa.get(i);
             if (pessoa.getCpf().equals(cpf)) {

@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package Main;
+
 
 import java.util.Date;
 import java.util.List;
@@ -17,25 +15,14 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Controle controle = new Controle();
-        Pessoa pessoa = new Pessoa();
 
-        pessoa.setCpf("111");
-        pessoa.setNome("Berola");
-        pessoa.setSobrenome("silva");
-        pessoa.setDataNascimento(new Date());
-
-        controle.inserir(pessoa);
-        pessoa = new Pessoa("222", "Timocréia", "Soutier", new Date());
-        controle.inserir(pessoa);
-        pessoa = new Pessoa("3333", "Reduzina", "Soutier", new Date());
-        controle.inserir(pessoa);
-
-        List<Pessoa> lp = controle.listar();
-        for (Pessoa p : lp) {
-            System.out.println(p);
-        }
-        System.out.println("--------------------");
+       
+       
+        
+        GUI gui = new GUI();
+        
+//////////////////////////////////////////////////////////////////////////
+    /*    System.out.println("--------------------");
         String cpfDeQuem = "222";
         pessoa = controle.buscar(cpfDeQuem);
         if (pessoa == null) {
@@ -60,6 +47,7 @@ public class Main {
         for (Pessoa p : lp) {
             System.out.println(p);
         }
+*/
     }
 
 }
