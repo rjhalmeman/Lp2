@@ -1,9 +1,10 @@
-
 package Main;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Pessoa {
+
     private String cpf;
     private String nome;
     private String sobrenome;
@@ -53,8 +54,8 @@ public class Pessoa {
 
     @Override
     public String toString() {
-        return "Pessoa{" + "cpf=" + cpf + ", nome=" + nome + ", sobrenome=" + sobrenome + ", dataNascimento=" + dataNascimento + '}';
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return cpf + "|" + nome + "|" + sobrenome + "|" + sdf.format(dataNascimento);
     }
 
-    
 }

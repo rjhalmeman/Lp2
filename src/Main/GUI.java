@@ -4,17 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -48,7 +47,10 @@ public class GUI extends JFrame {
     JButton btAlterar = new JButton("Alterar");
     JButton btExcluir = new JButton("Excluir");
     JButton btSalvar = new JButton("Salvar");
+    JButton btAdicionar = new JButton("Adicionar");
+    JButton btListar = new JButton("Listar");
     Pessoa pessoa;
+    String acao = "";
 
     public GUI() {
         //////////////////// insere dados para testes /////////////
@@ -58,20 +60,13 @@ public class GUI extends JFrame {
         pessoa.setSobrenome("silva");
         pessoa.setDataNascimento(new Date());
 
-        controle.inserir(pessoa);
+        controle.adicionar(pessoa);
         pessoa = new Pessoa("555", "Timocréia", "Soutier", new Date());
-        controle.inserir(pessoa);
+        controle.adicionar(pessoa);
         pessoa = new Pessoa("333", "Reduzina", "Soutier", new Date());
-        controle.inserir(pessoa);
+        controle.adicionar(pessoa);
         pessoa = new Pessoa("222", "Zulida", "Soutier", new Date());
-        controle.inserir(pessoa);
-
-        List<Pessoa> lp = controle.listar();
-
-        for (Pessoa p : lp) {
-            System.out.println(p);
-        }
-        ////////////////////////////
+        controle.adicionar(pessoa);
 
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
@@ -92,10 +87,19 @@ public class GUI extends JFrame {
         pnNorte.add(btAlterar);
         pnNorte.add(btExcluir);
         pnNorte.add(btSalvar);
+        pnNorte.add(btAdicionar);
+        pnNorte.add(btListar);
 
+        //status inicial
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
         btSalvar.setVisible(false);
+        btAdicionar.setVisible(false);
+        btListar.setVisible(true);
+
+        tfNome.setEditable(false);
+        tfSobrenome.setEditable(false);
+        tfDataNascimento.setEditable(false);
 
         pnCentro.setLayout(new GridLayout(3, 2));
         pnCentro.add(lbNome);
@@ -118,6 +122,7 @@ public class GUI extends JFrame {
                     tfDataNascimento.setText("");
                     btAlterar.setVisible(false);
                     btExcluir.setVisible(false);
+                    btAdicionar.setVisible(true);
                 } else {//achou
                     lbAviso.setText("Achou");
                     tfNome.setText(pessoa.getNome());
@@ -128,8 +133,23 @@ public class GUI extends JFrame {
                     tfNome.setEditable(false);
                     tfSobrenome.setEditable(false);
                     tfDataNascimento.setEditable(false);
+                    btAdicionar.setVisible(false);
                 }
 
+            }
+        });
+
+        btAdicionar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                tfCpf.setEditable(false);
+                btBuscar.setVisible(false);
+                tfNome.setEditable(true);
+                tfSobrenome.setEditable(true);
+                tfDataNascimento.setEditable(true);
+                btSalvar.setVisible(true);
+                btAdicionar.setVisible(false);
+                acao = "adicionar";
             }
         });
 
@@ -144,15 +164,18 @@ public class GUI extends JFrame {
                 tfNome.setEditable(true);
                 tfSobrenome.setEditable(true);
                 tfDataNascimento.setEditable(true);
-
+                acao = "alterar";
             }
         });
 
         btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                if (acao.equals("adicionar")) {
+                    pessoa = new Pessoa();
+                }
                 Pessoa atual = pessoa;
-                //daqui para frente alteramos os valores da pessoa (pessoaAlterada)
+
                 pessoa.setCpf(tfCpf.getText());
                 pessoa.setNome(tfNome.getText());
                 pessoa.setSobrenome(tfSobrenome.getText());
@@ -161,11 +184,67 @@ public class GUI extends JFrame {
                 } catch (ParseException ex) {
                     lbAviso.setText("erro na data");
                 }
-                controle.alterar(atual, pessoa);
-                List<Pessoa> lp = controle.listar();
-                for (Pessoa p : lp) {
-                    System.out.println(p);
+                if (acao.equals("alterar")) {
+                    controle.alterar(atual, pessoa);
+                } else {
+                    controle.adicionar(pessoa);
                 }
+
+                btSalvar.setVisible(false);
+                tfCpf.setText("");
+                tfNome.setText("");
+                tfSobrenome.setText("");
+                tfDataNascimento.setText("");
+                tfCpf.setEditable(true);
+                tfNome.setEditable(false);
+                tfSobrenome.setEditable(false);
+                tfDataNascimento.setEditable(false);
+                tfCpf.requestFocus();
+                btBuscar.setVisible(true);
+            }
+        });
+
+        btExcluir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                int response = JOptionPane.showConfirmDialog(cp,
+                        new String[]{"O registro será excluído", "CPF=" + tfCpf.getText() + " - "
+                            + "Nome = " + tfNome.getText()},
+                        "title", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE); // icon kind
+                if (response == JOptionPane.YES_OPTION) {
+                    controle.excluir(pessoa);
+                    lbAviso.setText("Excluiu");
+                } else {
+                    lbAviso.setText("Pode buscar");
+                }
+                btSalvar.setVisible(false);
+                tfCpf.setText("");
+                tfNome.setText("");
+                tfSobrenome.setText("");
+                tfDataNascimento.setText("");
+                tfCpf.setEditable(true);
+                tfNome.setEditable(false);
+                tfSobrenome.setEditable(false);
+                tfDataNascimento.setEditable(false);
+                tfCpf.requestFocus();
+                btBuscar.setVisible(true);
+                btAlterar.setVisible(false);
+                btExcluir.setVisible(false);
+                btAdicionar.setVisible(false);
+
+            }
+        });
+
+        btListar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Point xy = getLocationOnScreen();
+                System.out.println("x = " + xy.getX());
+                System.out.println("y = " + xy.getY());
+                int altura = getHeight();
+                int largura = getWidth();
+                GUIListarPessoa guiListarPessoa = new GUIListarPessoa(controle,xy, altura, largura);
             }
         });
 

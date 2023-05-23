@@ -11,7 +11,7 @@ public class Controle {
 
     private List<Pessoa> listaPessoa = new ArrayList<>();
 
-    public void inserir(Pessoa pessoa) {
+    public void adicionar(Pessoa pessoa) {
         listaPessoa.add(pessoa);
     }
 
@@ -32,7 +32,7 @@ public class Controle {
         listaPessoa.set(qualPessoa, pessoaAlterada);
     }
     
-    public void delete(Pessoa pessoa){
+    public void excluir(Pessoa pessoa){
         listaPessoa.remove(pessoa);
     }
 
