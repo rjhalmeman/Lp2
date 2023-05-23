@@ -240,8 +240,8 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 Point xy = getLocationOnScreen();
-                System.out.println("x = " + xy.getX());
-                System.out.println("y = " + xy.getY());
+//                System.out.println("x = " + xy.getX());
+//                System.out.println("y = " + xy.getY());
                 int altura = getHeight();
                 int largura = getWidth();
                 GUIListarPessoa guiListarPessoa = new GUIListarPessoa(controle,xy, altura, largura);
