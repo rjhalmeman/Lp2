@@ -25,7 +25,7 @@ import java.awt.event.FocusListener;
  *
  * @author radames
  */
-class GUI extends JFrame {
+class GUIProduto extends JFrame {
 
     //variáreis globais
     Container cp;
@@ -35,7 +35,7 @@ class GUI extends JFrame {
     JLabel lbId = new JLabel("Id");
     JTextField tfId = new JTextField(10);
     JButton btBuscar = new JButton("Buscar");
-    Controle controle = new Controle();
+    ControleProduto controle = new ControleProduto();
     Produto produto = new Produto();
     JLabel lbAviso = new JLabel("xxxx");
 
@@ -55,12 +55,13 @@ class GUI extends JFrame {
     String acao;
     String caminho = "Produto.csv";
 
-    public GUI() {
+    public GUIProduto() {
         //busca os dados no arquivo CSV e preenche a lista de produto
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
         controle.preencherListaProduto(manipulaArquivo.abrirArquivo(caminho));
-        
+
         //componentes visuais
+        setTitle("Produto - Crud base");
         cp = getContentPane();
 
         cp.setLayout(new BorderLayout());
@@ -104,8 +105,7 @@ class GUI extends JFrame {
         tfNome.setEditable(false);
         tfPreco.setEditable(false);
         tfUnidadeDeMedida.setEditable(false);
-        
-        
+
         //listeners
         tfId.addFocusListener(new FocusListener() {
             @Override
@@ -115,7 +115,7 @@ class GUI extends JFrame {
 
             @Override
             public void focusLost(FocusEvent fe) {
-                
+
             }
         });
 
@@ -124,12 +124,13 @@ class GUI extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 if (tfId.getText().isEmpty()) {
                     tfId.requestFocus();
-                    
                 } else {
                     produto = controle.buscar(Integer.valueOf(tfId.getText()));
                     if (produto == null) {//não achou
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
+                        btAlterar.setVisible(false);
+                        btExcluir.setVisible(false);
                     } else {//encontra na lista
                         tfId.setText(String.valueOf(produto.getIdProduto()));
                         tfNome.setText(produto.getNomeProduto());
@@ -262,12 +263,12 @@ class GUI extends JFrame {
                 lbAviso.setText("Relatório");
                 Point coordenadas = getLocation();//pega as coordenadas da guiPai
                 Dimension dimensao = getSize();
-                GUIListarProduto guiListarProduto = 
-                        new GUIListarProduto(controle, coordenadas, dimensao);
+                GUIListarProduto guiListarProduto
+                        = new GUIListarProduto(controle, coordenadas, dimensao);
             }
         });
 
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
         addWindowListener(new WindowAdapter() {
             @Override
@@ -276,7 +277,7 @@ class GUI extends JFrame {
                 ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
                 manipulaArquivo.salvarArquivo(caminho, controle.listaDeProdutosString());
                 System.exit(0);
-                
+
             }
         });
 

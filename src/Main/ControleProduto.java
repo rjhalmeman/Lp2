@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author radames
  */
-public class Controle {
+public class ControleProduto {
 
     private List<Produto> listaProduto = new ArrayList<>();
 
