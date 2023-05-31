@@ -1,5 +1,6 @@
 package Main;
 
+import MyUtil.CaixaDeFerramentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -36,14 +37,14 @@ class GUI extends JFrame {
     JTextField tfId = new JTextField(10);
     JButton btBuscar = new JButton("Buscar");
     Controle controle = new Controle();
-    Produto produto = new Produto();
+    Carro carro = new Carro();
     JLabel lbAviso = new JLabel("xxxx");
 
     JLabel lbNome = new JLabel("Nome");
     JTextField tfNome = new JTextField(40);
-    JLabel lbPreco = new JLabel("Preço");
-    JTextField tfPreco = new JTextField(40);
-    JLabel lbUnidadeDeMedida = new JLabel("Unidade de Medida");
+    JLabel lbPeso = new JLabel("Peso");
+    JTextField tfPeso = new JTextField(40);
+    JLabel lbDataLancamento = new JLabel("Data de lançamento");
     JTextField tfUnidadeDeMedida = new JTextField(40);
     JButton btAdicionar = new JButton("Adicionar");
     JButton btSalvar = new JButton("Salvar");
@@ -53,13 +54,19 @@ class GUI extends JFrame {
     JButton btCancelar = new JButton("Cancelar");
 
     String acao;
-    String caminho = "Produto.csv";
+    String caminho = "Carro.csv";
+    CaixaDeFerramentas cf = new CaixaDeFerramentas();
 
     public GUI() {
         //busca os dados no arquivo CSV e preenche a lista de produto
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
-        controle.preencherListaProduto(manipulaArquivo.abrirArquivo(caminho));
-        
+        if (manipulaArquivo.existeOArquivo(caminho)) {
+         controle.preencherListaProduto(manipulaArquivo.abrirArquivo(caminho));
+
+        } else {
+            manipulaArquivo.criarArquivoVazio(caminho);
+        }
+
         //componentes visuais
         cp = getContentPane();
 
@@ -86,9 +93,9 @@ class GUI extends JFrame {
         pnCentro.setLayout(new GridLayout(3, 2));
         pnCentro.add(lbNome);
         pnCentro.add(tfNome);
-        pnCentro.add(lbPreco);
-        pnCentro.add(tfPreco);
-        pnCentro.add(lbUnidadeDeMedida);
+        pnCentro.add(lbPeso);
+        pnCentro.add(tfPeso);
+        pnCentro.add(lbDataLancamento);
         pnCentro.add(tfUnidadeDeMedida);
 
         pnSul.add(lbAviso);
@@ -102,10 +109,9 @@ class GUI extends JFrame {
         btListar.setVisible(true);
         tfId.setEditable(true);
         tfNome.setEditable(false);
-        tfPreco.setEditable(false);
+        tfPeso.setEditable(false);
         tfUnidadeDeMedida.setEditable(false);
-        
-        
+
         //listeners
         tfId.addFocusListener(new FocusListener() {
             @Override
@@ -115,7 +121,7 @@ class GUI extends JFrame {
 
             @Override
             public void focusLost(FocusEvent fe) {
-                
+
             }
         });
 
@@ -124,17 +130,17 @@ class GUI extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 if (tfId.getText().isEmpty()) {
                     tfId.requestFocus();
-                    
+
                 } else {
-                    produto = controle.buscar(Integer.valueOf(tfId.getText()));
-                    if (produto == null) {//não achou
+                    carro = controle.buscar(Integer.valueOf(tfId.getText()));
+                    if (carro == null) {//não achou
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                     } else {//encontra na lista
-                        tfId.setText(String.valueOf(produto.getIdProduto()));
-                        tfNome.setText(produto.getNomeProduto());
-                        tfPreco.setText(String.valueOf(produto.getPrecoProduto()));
-                        tfUnidadeDeMedida.setText(produto.getUnidadeDeMedida());
+                        tfId.setText(String.valueOf(carro.getIdCarro()));
+                        tfNome.setText(carro.getNomeCarro());
+                        tfPeso.setText(String.valueOf(carro.getPesoCarro()));
+                        tfUnidadeDeMedida.setText(cf.converteDeDateParaString(carro.getDataLancamento()));
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         lbAviso.setText("Encontrou o registro");
@@ -149,7 +155,7 @@ class GUI extends JFrame {
 
                 tfId.setEditable(false);
                 tfNome.setEditable(true);
-                tfPreco.setEditable(true);
+                tfPeso.setEditable(true);
                 tfUnidadeDeMedida.setEditable(true);
 
                 tfNome.requestFocus();
@@ -167,7 +173,7 @@ class GUI extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 tfId.setEditable(false);
                 tfNome.setEditable(true);
-                tfPreco.setEditable(true);
+                tfPeso.setEditable(true);
                 tfUnidadeDeMedida.setEditable(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
@@ -182,31 +188,31 @@ class GUI extends JFrame {
         btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                Produto original = produto;
+                Carro original = carro;
                 if (acao.equals("adicionando")) {
-                    produto = new Produto();
+                    carro = new Carro();
                 }
 
-                produto.setIdProduto(Integer.valueOf(tfId.getText()));
-                produto.setNomeProduto(tfNome.getText());
-                produto.setPrecoProduto(Double.valueOf(tfPreco.getText()));
-                produto.setUnidadeDeMedida(tfUnidadeDeMedida.getText());
+                carro.setIdCarro(Integer.valueOf(tfId.getText()));
+                carro.setNomeCarro(tfNome.getText());
+                carro.setPesoCarro(Double.valueOf(tfPeso.getText()));
+                carro.setDataLancamento(cf.converteDeStringParaDate(tfUnidadeDeMedida.getText()));
                 if (acao == "adicionando") {
-                    controle.inserir(produto);
+                    controle.inserir(carro);
                     lbAviso.setText("Inseriu o registro");
                 } else {
-                    controle.atualizar(original, produto);
+                    controle.atualizar(original, carro);
                     lbAviso.setText("Alterou o registro");
                 }
 
                 tfId.setText("");
                 tfNome.setText("");
-                tfPreco.setText("");
+                tfPeso.setText("");
                 tfUnidadeDeMedida.setText("");
                 tfId.requestFocus();
                 tfId.setEditable(true);
                 tfNome.setEditable(false);
-                tfPreco.setEditable(false);
+                tfPeso.setEditable(false);
                 tfUnidadeDeMedida.setEditable(false);
 
                 btBuscar.setVisible(true);
@@ -221,12 +227,12 @@ class GUI extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 tfId.setText("");
                 tfNome.setText("");
-                tfPreco.setText("");
+                tfPeso.setText("");
                 tfUnidadeDeMedida.setText("");
                 tfId.requestFocus();
                 tfId.setEditable(true);
                 tfNome.setEditable(false);
-                tfPreco.setEditable(false);
+                tfPeso.setEditable(false);
                 tfUnidadeDeMedida.setEditable(false);
 
                 btBuscar.setVisible(true);
@@ -243,11 +249,11 @@ class GUI extends JFrame {
                         showConfirmDialog(cp, "Confirma a exclusão?", "Excluindo", JOptionPane.YES_NO_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
                 if (opcao == JOptionPane.YES_NO_OPTION) {
-                    controle.excluir(produto);
+                    controle.excluir(carro);
                 }
                 tfId.setText("");
                 tfNome.setText("");
-                tfPreco.setText("");
+                tfPeso.setText("");
                 tfUnidadeDeMedida.setText("");
                 tfId.requestFocus();
                 tfId.setEditable(true);
@@ -262,12 +268,12 @@ class GUI extends JFrame {
                 lbAviso.setText("Relatório");
                 Point coordenadas = getLocation();//pega as coordenadas da guiPai
                 Dimension dimensao = getSize();
-                GUIListarProduto guiListarProduto = 
-                        new GUIListarProduto(controle, coordenadas, dimensao);
+                GUIListarCarro guiListarProduto
+                        = new GUIListarCarro(controle, coordenadas, dimensao);
             }
         });
 
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
         addWindowListener(new WindowAdapter() {
             @Override
@@ -276,7 +282,7 @@ class GUI extends JFrame {
                 ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
                 manipulaArquivo.salvarArquivo(caminho, controle.listaDeProdutosString());
                 System.exit(0);
-                
+
             }
         });
 
