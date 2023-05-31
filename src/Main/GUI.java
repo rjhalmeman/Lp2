@@ -53,11 +53,12 @@ class GUI extends JFrame {
     JButton btCancelar = new JButton("Cancelar");
 
     String acao;
+    String caminho = "Produto.csv";
 
     public GUI() {
         //busca os dados no arquivo CSV e preenche a lista de produto
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
-        controle.preencherListaProduto(manipulaArquivo.abrirArquivo("Produto.csv"));
+        controle.preencherListaProduto(manipulaArquivo.abrirArquivo(caminho));
         
         //componentes visuais
         cp = getContentPane();
@@ -123,7 +124,7 @@ class GUI extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 if (tfId.getText().isEmpty()) {
                     tfId.requestFocus();
-                    lbAviso.setText("o Id não pode ser vazio");
+                    
                 } else {
                     produto = controle.buscar(Integer.valueOf(tfId.getText()));
                     if (produto == null) {//não achou
@@ -261,7 +262,8 @@ class GUI extends JFrame {
                 lbAviso.setText("Relatório");
                 Point coordenadas = getLocation();//pega as coordenadas da guiPai
                 Dimension dimensao = getSize();
-                GUIListarProduto guiListarProduto = new GUIListarProduto(controle, coordenadas, dimensao);
+                GUIListarProduto guiListarProduto = 
+                        new GUIListarProduto(controle, coordenadas, dimensao);
             }
         });
 
@@ -272,7 +274,7 @@ class GUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 // gravar a lista em dispositivo de armazenamento permanente
                 ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
-                manipulaArquivo.salvarArquivo("Produto.csv", controle.listaDeProdutosString());
+                manipulaArquivo.salvarArquivo(caminho, controle.listaDeProdutosString());
                 System.exit(0);
                 
             }
