@@ -54,7 +54,7 @@ public class Produto {
 
     @Override
     public String toString() {
-        return idProduto + "," + nomeProduto + "," + precoProduto + "," + unidadeDeMedida ;
+        return idProduto + ";" + nomeProduto + ";" + precoProduto + ";" + unidadeDeMedida ;
     }
    
    
