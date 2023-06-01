@@ -11,7 +11,7 @@ public class Main {
      */
     public static void main(String[] args) {
         
-        GUIProduto gui = new GUIProduto();
+        CarroGUI gui = new CarroGUI();
     }
 
 }
