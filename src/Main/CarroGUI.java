@@ -343,8 +343,11 @@ class CarroGUI extends JFrame {
                 Dimension dimensao = getSize();
                 String idSelecionado
                         = new CarroGUIListar(controle, coordenadas, dimensao).getIdSelecionado();
-                tfPlaca.setText(idSelecionado);
-                btBuscar.doClick();
+                if (idSelecionado != null) { //se selecionou algo no listagem, abre.
+                    tfPlaca.setText(idSelecionado);
+                    btBuscar.doClick();
+                }
+                tfPlaca.requestFocus();
             }
         });
 

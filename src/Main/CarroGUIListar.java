@@ -1,15 +1,19 @@
 package Main;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,26 +22,33 @@ import javax.swing.table.DefaultTableModel;
  */
 class CarroGUIListar extends JDialog {
 
-    Container cp;
+    private Container cp;
 
-    String[] colunas = {"Placa", "Nome", "Peso", "Lançamento"};
-    String[][] dados = new String[0][colunas.length];
-    DefaultTableModel model = new DefaultTableModel(dados, colunas);
-    JTable tabela = new JTable(model);
-    JScrollPane scrollTabela = new JScrollPane();
+    private String[] colunas = {"Placa", "Nome", "Peso", "Lançamento"};
+    private String[][] dados = new String[0][colunas.length];
+    private DefaultTableModel model = new DefaultTableModel(dados, colunas);
+    private JTable tabela = new JTable(model);
+    private JScrollPane scrollTabela = new JScrollPane();
     private String idSelecionado;
+    private JPanel pnCentro = new JPanel();
+    private JPanel pnSul = new JPanel();
+    private JButton btFechar = new JButton("Fechar");
 
     public CarroGUIListar(CarroControle controle, Point coordenadas, Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setModal(true);
-        //  setTitle("Relatório de produto");
-
+        
         setUndecorated(true);//sem barra de título
         cp = getContentPane();
-        cp.setLayout(new GridLayout(1, 1));
+        cp.setLayout(new BorderLayout());
+        cp.add(pnCentro,BorderLayout.CENTER);
+        cp.add(pnSul,BorderLayout.SOUTH);
+        
+        
+        pnCentro.setLayout(new GridLayout(1, 1));
+        pnCentro.add(scrollTabela);
 
-        cp.add(scrollTabela);
-
+        pnSul.add(btFechar);
         List<Carro> listaDados = controle.listar();
 
         Object[][] dados = new Object[listaDados.size()][colunas.length];
@@ -64,30 +75,16 @@ class CarroGUIListar extends JDialog {
                 }
             }
         });
+        
+        btFechar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                idSelecionado = null;
+                dispose();//fecha sem escolher nenhum da lista
+            }
+        });
+        
 
-//        tabela.addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent me) {
-//                System.out.println("linha ");
-//                dispose();//ao clicar no table, fecha o relatório
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent me) {
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent me) {
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent me) {
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent me) {
-//            }
-//        });
         setSize(dimensao);
         setLocation((int) coordenadas.getX(), (int) coordenadas.getY() + 30);
 
