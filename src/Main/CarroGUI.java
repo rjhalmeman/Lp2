@@ -171,6 +171,7 @@ class CarroGUI extends JFrame {
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                tfPlaca.setText(tfPlaca.getText().trim());
                 if (tfPlaca.getText().isEmpty()) {
                     tfPlaca.requestFocus();
                 } else {
