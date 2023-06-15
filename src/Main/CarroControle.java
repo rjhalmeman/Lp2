@@ -56,6 +56,7 @@ public class CarroControle {
             carro.setPesoCarro(Double.valueOf(aux[2]));
             carro.setDataLancamento(cf.converteDeStringParaDate(aux[3]));
             carro.setCorDoCarro(Integer.valueOf(aux[4]));
+            carro.setTemSeguro(Boolean.valueOf((aux[5].equals("Sim")?true:false)));
             listaCarro.add(carro);           
         }
  

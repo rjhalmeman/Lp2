@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
@@ -67,6 +68,7 @@ class CarroGUI extends JFrame {
     JTextField tfDataLancamento = new JTextField(40);
     JLabel lbCor = new JLabel("Cor");
     JComboBox cbCor = new JComboBox();
+    JCheckBox checkBoxTemSeguro = new JCheckBox("Tem seguro");
 
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
@@ -134,7 +136,7 @@ class CarroGUI extends JFrame {
         btSalvar.setToolTipText("Salvar dados do registro");
         btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
 
-        pnCentro.setLayout(new GridLayout(4, 2));
+        pnCentro.setLayout(new GridLayout(5, 2));
         pnCentro.add(lbNome);
         pnCentro.add(tfNome);
         pnCentro.add(lbPeso);
@@ -143,6 +145,7 @@ class CarroGUI extends JFrame {
         pnCentro.add(tfDataLancamento);
         pnCentro.add(lbCor);
         pnCentro.add(cbCor);
+        pnCentro.add(checkBoxTemSeguro);
 
         pnSul.add(lbAviso);
 
@@ -158,6 +161,7 @@ class CarroGUI extends JFrame {
         tfPeso.setEditable(false);
         tfDataLancamento.setEditable(false);
         cbCor.setEnabled(false);
+        checkBoxTemSeguro.setEnabled(false);
 
         lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
@@ -212,13 +216,14 @@ class CarroGUI extends JFrame {
                         tfPeso.setText("");
                         tfDataLancamento.setText("");
                         cbCor.setSelectedIndex(0);//mostra o primeiro da lista
+                        checkBoxTemSeguro.setSelected(false);
 
                     } else {//encontra na lista
                         tfPlaca.setText(String.valueOf(carro.getPlacaCarro()));
                         tfNome.setText(carro.getNomeCarro());
                         tfPeso.setText(String.valueOf(carro.getPesoCarro()));
                         tfDataLancamento.setText(cf.converteDeDateParaString(carro.getDataLancamento()));
-
+                        checkBoxTemSeguro.setSelected(carro.isTemSeguro());
                         //busca na lista o nome correto
                         for (String aCor : listaCores) {
                             if (Integer.valueOf(aCor.split("-")[0].trim()) == carro.getCorDoCarro()) {
@@ -245,6 +250,7 @@ class CarroGUI extends JFrame {
                 tfPeso.setEditable(true);
                 tfDataLancamento.setEditable(true);
                 cbCor.setEnabled(true);
+                checkBoxTemSeguro.setEnabled(true);
 
                 tfNome.requestFocus();
                 btAdicionar.setVisible(false);
@@ -266,6 +272,7 @@ class CarroGUI extends JFrame {
                 tfPeso.setEditable(true);
                 tfDataLancamento.setEditable(true);
                 cbCor.setEnabled(true);
+                checkBoxTemSeguro.setEnabled(true);
 
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
@@ -309,6 +316,8 @@ class CarroGUI extends JFrame {
                 String aux = String.valueOf(cbCor.getSelectedItem());
                 int aCor = Integer.valueOf(aux.split("-")[0].trim());                          
                 carro.setCorDoCarro(aCor);
+                
+                carro.setTemSeguro(checkBoxTemSeguro.isSelected());
 
                 if (!deuErro) {
                     if (acao == "adicionando") {
@@ -356,6 +365,8 @@ class CarroGUI extends JFrame {
                 tfNome.setEditable(false);
                 tfPeso.setEditable(false);
                 tfDataLancamento.setEditable(false);
+                cbCor.setEnabled(false);
+                checkBoxTemSeguro.setEnabled(false);
 
                 btBuscar.setVisible(true);
                 btSalvar.setVisible(false);

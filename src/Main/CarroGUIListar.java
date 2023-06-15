@@ -24,7 +24,7 @@ class CarroGUIListar extends JDialog {
 
     private Container cp;
 
-    private String[] colunas = {"Placa", "Nome", "Peso", "Lançamento","Cor"};
+    private String[] colunas = {"Placa", "Nome", "Peso", "Lançamento","Cor","Seguro"};
     private String[][] dados = new String[0][colunas.length];
     private DefaultTableModel model = new DefaultTableModel(dados, colunas);
     private JTable tabela = new JTable(model);

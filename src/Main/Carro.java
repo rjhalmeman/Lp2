@@ -14,16 +14,18 @@ public class Carro {
     private double pesoCarro;
     private Date dataLancamento;
     private int corDoCarro;
+    private boolean temSeguro;
 
     public Carro() {
     }
 
-    public Carro(String placaCarro, String nomeCarro, double pesoCarro, Date dataLancamento, int corDoCarro) {
+    public Carro(String placaCarro, String nomeCarro, double pesoCarro, Date dataLancamento, int corDoCarro, boolean temSeguro) {
         this.placaCarro = placaCarro;
         this.nomeCarro = nomeCarro;
         this.pesoCarro = pesoCarro;
         this.dataLancamento = dataLancamento;
         this.corDoCarro = corDoCarro;
+        this.temSeguro = temSeguro;
     }
 
     public String getPlacaCarro() {
@@ -66,10 +68,17 @@ public class Carro {
         this.corDoCarro = corDoCarro;
     }
 
+    public boolean isTemSeguro() {
+        return temSeguro;
+    }
+
+    public void setTemSeguro(boolean temSeguro) {
+        this.temSeguro = temSeguro;
+    }
+
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return placaCarro + ";" + nomeCarro + ";" + pesoCarro + ";" + sdf.format(dataLancamento) + ";" + corDoCarro;
+        return placaCarro + ";" + nomeCarro + ";" + pesoCarro + ";" + sdf.format(dataLancamento) + ";" + corDoCarro+";"+(temSeguro?"Sim":"Não");
     }
-
 }
