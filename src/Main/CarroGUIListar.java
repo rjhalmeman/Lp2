@@ -7,14 +7,20 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -34,17 +40,26 @@ class CarroGUIListar extends JDialog {
     private JPanel pnSul = new JPanel();
     private JButton btFechar = new JButton("Fechar");
 
+    private List<RowSorter.SortKey> getSortKeysList(int columnIndex) {
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING));
+        return sortKeys;
+    }
+
     public CarroGUIListar(CarroControle controle, Point coordenadas, Dimension dimensao) {
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tabela.setRowSorter(sorter);
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setModal(true);
-        
+
         setUndecorated(true);//sem barra de título
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
-        cp.add(pnCentro,BorderLayout.CENTER);
-        cp.add(pnSul,BorderLayout.SOUTH);
-        
-        
+        cp.add(pnCentro, BorderLayout.CENTER);
+        cp.add(pnSul, BorderLayout.SOUTH);
+
         pnCentro.setLayout(new GridLayout(1, 1));
         pnCentro.add(scrollTabela);
 
@@ -75,7 +90,18 @@ class CarroGUIListar extends JDialog {
                 }
             }
         });
-        
+
+        // Adicionar o MouseListener ao JTableHeader
+        tabela.getTableHeader().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int columnIndex = tabela.columnAtPoint(e.getPoint());
+                //sorter.toggleSortOrder(columnIndex);
+                sorter.setSortKeys(getSortKeysList(columnIndex));
+                sorter.sort();
+            }
+        });
+
         btFechar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -83,7 +109,6 @@ class CarroGUIListar extends JDialog {
                 dispose();//fecha sem escolher nenhum da lista
             }
         });
-        
 
         setSize(dimensao);
         setLocation((int) coordenadas.getX(), (int) coordenadas.getY() + 30);

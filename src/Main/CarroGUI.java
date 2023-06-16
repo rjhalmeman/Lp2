@@ -1,6 +1,7 @@
 package Main;
 
 import MyUtil.CaixaDeFerramentas;
+import MyUtil.CentroDoMonitorMaior;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -146,6 +147,8 @@ class CarroGUI extends JFrame {
         Font fonte = lbAviso.getFont();
         Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
         lbAviso.setFont(fonteNegrito);
+        
+       
 
         //listeners
         tfPlaca.addFocusListener(new FocusListener() {
@@ -367,7 +370,8 @@ class CarroGUI extends JFrame {
 
         //setSize(800, 300);
         pack();
-        setLocationRelativeTo(null);
+//        setLocationRelativeTo(null);
+        setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setVisible(true);
     }
 

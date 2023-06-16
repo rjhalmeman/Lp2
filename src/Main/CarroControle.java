@@ -2,6 +2,8 @@ package Main;
 
 import MyUtil.CaixaDeFerramentas;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -12,10 +14,24 @@ public class CarroControle {
 
     private List<Carro> listaCarro = new ArrayList<>();
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
+    
+     public void inserir(Carro carro) {
+        // listaCarro.add(carro);
+        int posicao = 
+                Collections.binarySearch(listaCarro, carro, 
+                        Comparator.comparing(Carro::getNomeCarro));
 
-    public void inserir(Carro carro) {
-        listaCarro.add(carro);
+        if (posicao < 0) {
+            posicao = -(posicao + 1);
+        }
+
+        listaCarro.add(posicao, carro);
     }
+    
+
+//    public void inserir(Carro carro) {
+//        listaCarro.add(carro);
+//    }
 
     public Carro buscar(String placaCarro) {
         for (int i = 0; i < listaCarro.size(); i++) {
