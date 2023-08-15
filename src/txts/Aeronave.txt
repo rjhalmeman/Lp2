@@ -1,0 +1,3 @@
+String;id;30
+String;nome;50
+String;foto;20

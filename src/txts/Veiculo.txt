@@ -1,0 +1,2 @@
+int;identificacao;0
+String;nome;30
