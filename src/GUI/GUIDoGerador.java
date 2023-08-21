@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import tools.CentroDoMonitorMaior;
 import tools.CopiarArquivos;
 import tools.ManipulaArquivo;
 
@@ -222,16 +223,40 @@ public class GUIDoGerador extends JFrame {
         btAbrirEntidade.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File file = new File("src/txts/" + tfNomeClasse.getText() + ".txt");
-                texto.clear();
-                txtArea.setText("");
+                 FileNameExtensionFilter filter = new FileNameExtensionFilter("ARQUIVOS", "csv", "txt");
+                caixaDeDialogo.setFileFilter(filter);
+                caixaDeDialogo.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                File file = new File("src/txts");
                 if (file.exists()) {
-                    texto = manipulaArquivo.abrirArquivo("src/txts/" + tfNomeClasse.getText() + ".txt");
+                    caixaDeDialogo.setCurrentDirectory(file);
+                } else {
+                    file = new File("src/txts");
+                    if (file.exists()) {
+                        caixaDeDialogo.setCurrentDirectory(file);
+                    } else {
+                        caixaDeDialogo.setCurrentDirectory(null);
+                        
+                    }
+
+                }
+                if (caixaDeDialogo.showOpenDialog(cp) == JFileChooser.APPROVE_OPTION) {
+                    file = new File(caixaDeDialogo.getSelectedFile().getAbsolutePath());
+                    String fn = file.getName();
+                    fn = fn.substring(0, fn.length()-4);
+                    tfNomeClasse.setText(fn);
+                    texto.clear();
+                   // System.out.println("classe "+tfNomeClasse.getText());
+                    texto = manipulaArquivo.abrirArquivo(file.getAbsolutePath());
+                    txtArea.setText("");
                     for (String string : texto) {
-                        txtArea.append(string + System.lineSeparator());
+                        txtArea.append(string+System.lineSeparator());
                     }
                 }
-                // System.out.println("linhas "+texto.size());
+                
+                
+                
+                
+               
             }
 
         });
@@ -342,9 +367,9 @@ public class GUIDoGerador extends JFrame {
             }
         });
 
-        setTitle("Gerador de código Iguana");
+        setTitle("Gerador de código da Gabriela Vaccareli");
         setSize(1000, 600);
-        setLocationRelativeTo(null);
+        setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setVisible(true);
     }
 

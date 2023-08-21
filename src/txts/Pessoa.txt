@@ -1,3 +1,4 @@
 String;cpf;15;
 String;nome;30;
 Date;data;20;
+double;altura;10
