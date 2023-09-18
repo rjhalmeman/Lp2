@@ -2,6 +2,7 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.List;
+import tools.ManipulaArquivo;
 import tools.StringTools;
 
 /**
@@ -10,24 +11,28 @@ import tools.StringTools;
  */
 public class GerarEntidade {
 
-    public GerarEntidade(List<String> atributo, String nomeClasse) {
+    public GerarEntidade(List<String> atributo, String nomeClasse, String caminhoProjetoDestino) {
+
         StringTools st = new StringTools();
         List<String> codigo = new ArrayList<>();
         String aux[];
 
         codigo.add("package Entidades;");
         codigo.add("import java.util.Date;");
+        codigo.add("import java.text.SimpleDateFormat;");
         codigo.add("/**\n"
                 + " *\n"
                 + " * @author Radames\n"
                 + " */");
         codigo.add("public class " + nomeClasse + " {");
+
+        codigo.add(System.lineSeparator() + " //atributos da entidade" + System.lineSeparator());
         for (int i = 0; i < atributo.size(); i++) {
             aux = atributo.get(i).split(";");
 
             codigo.add("private " + aux[0] + " " + aux[1] + ";");
         }
-
+        codigo.add(System.lineSeparator() + System.lineSeparator() + "//métodos construtores" + System.lineSeparator());
         codigo.add("public " + nomeClasse + "() {\n"
                 + "    }");
 
@@ -43,7 +48,7 @@ public class GerarEntidade {
             codigo.add("this." + aux[1] + "=" + aux[1] + ";");
         }
         codigo.add("}");
-        codigo.add("//gets");
+        codigo.add(System.lineSeparator() + System.lineSeparator() + "//métodos get" + System.lineSeparator());
 
         for (int i = 0; i < atributo.size(); i++) {
             aux = atributo.get(i).split(";");
@@ -52,7 +57,7 @@ public class GerarEntidade {
             codigo.add("}");
         }
 
-        codigo.add("//sets");
+        codigo.add(System.lineSeparator() + System.lineSeparator() + "//métodos set" + System.lineSeparator());
 
         for (int i = 0; i < atributo.size(); i++) {
             aux = atributo.get(i).split(";");
@@ -61,7 +66,7 @@ public class GerarEntidade {
             codigo.add("}");
         }
         //toString
-        codigo.add(" @Override");
+        codigo.add(System.lineSeparator() + " @Override" + System.lineSeparator());
         boolean umDate = false;
 
         parametros = "";
@@ -85,14 +90,18 @@ public class GerarEntidade {
 
         codigo.add("}//fim da classe");
 
-//        System.out.println("parametros "+parametros);
-//        System.exit(0);
+        //System.out.println("parametros "+parametros);
+        //
         //mostra o código gerado
-        for (String c : codigo) {
-            System.out.println(c);
-        }
+        //for (String c : codigo) {
+        //  System.out.println(c);
+        // }
+        ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
+        String caminhoClasseEntidade = caminhoProjetoDestino + "/src/Entidades/" + nomeClasse + ".java";
+        System.out.println("cce " + caminhoClasseEntidade);
+        // System.exit(0);
+        manipulaArquivo.salvarArquivo(caminhoClasseEntidade, codigo); //vai salvar a classe de entidade dentro da pasta entidades, no projeto destino.
 
-        //codigo.add("");
     }
 
 }

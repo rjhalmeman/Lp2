@@ -1,5 +1,6 @@
 package Main;
 
+import Geradores.GeradorDeEstruturas;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ public class GUIGerador extends JFrame {
 
     Container cp;
     JButton btGerarEstrutura = new JButton("Estrutura");
+    JButton btGerarClasseDeEntidade = new JButton("Entidade");
     JLabel lbProjetoDestino = new JLabel("destino");
 
     public GUIGerador() {
@@ -35,14 +37,14 @@ public class GUIGerador extends JFrame {
         atributo.add("double;altura;5");
 
         String nomeClasse = "Pessoa";
+        
+        
+        //usar um JFileChooser para escolher essa pasta
         String caminhoProjetoDestino = "/home/radames/NetBeansProjects/AAABBB";
 
         lbProjetoDestino.setText(caminhoProjetoDestino);
-
-        //  GerarEntidade gerarEntidade = new GerarEntidade(atributo,nomeClasse);
+        
         //  GerarControle gerarControle = new GerarControle(atributo,nomeClasse,caminhoDoProjetoDestino);
-        
-        
         
         
         setTitle("Gerador de CRUD dos WebGartner");
@@ -52,59 +54,23 @@ public class GUIGerador extends JFrame {
 
         cp.add(lbProjetoDestino);
         cp.add(btGerarEstrutura);
+        cp.add(btGerarClasseDeEntidade);
+        
 
-        
-        
-        
         btGerarEstrutura.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String src = lbProjetoDestino.getText();
-                List<String> listaString = new ArrayList<>();
-                listaString.clear();
-                listaString.add("/src/" + "Entidades");
-                listaString.add("/src/" + "Controles");
-                listaString.add("/src/" + "GUIs");
-                listaString.add("/src/" + "tools");
-                listaString.add("/src/" + "icones");
-                listaString.add("/src/" + "Main");
-
-                for (String pacote : listaString) {
-                    File pac = new File(src + pacote);
-                    if (!pac.exists()) {
-                        new File(src + pacote).mkdir();//cria as pastas
-                    }
-                }
-
-                //copiar pacote de icones
-                File listaIcones = new File("src/icones");
-
-                if (listaIcones.exists()) {
-                    File[] arqs = listaIcones.listFiles();
-                    CopiarArquivos copiarArquivos = new CopiarArquivos();
-                    for (int i = 0; i < arqs.length; i++) {
-                      //  System.out.print(" A origem " + arqs[i].getAbsolutePath() + "  ---  ");
-                      //  System.out.println("destino " + caminhoProjetoDestino + "/src" + "/icones/" + arqs[i].getName());
-                        copiarArquivos.copiar(arqs[i].getAbsolutePath(),
-                                caminhoProjetoDestino + "/src" + "/icones/" + arqs[i].getName());
-                    }
-                }
-
-                //copiar pacote de ferramentas
-                File listaFerramentas = new File("src/tools");
-                if (listaFerramentas.exists()) {
-                    File[] arqs = listaFerramentas.listFiles();
-                    CopiarArquivos copiarArquivos = new CopiarArquivos();
-                    for (int i = 0; i < arqs.length; i++) {
-                        copiarArquivos.copiar(arqs[i].getAbsolutePath(),
-                                caminhoProjetoDestino + "/src" + "/tools/" + arqs[i].getName());
-                    }
-
-                }
-
+                GeradorDeEstruturas geradorDeEstruturas = new GeradorDeEstruturas(caminhoProjetoDestino);
             }
         });
-
+        
+        btGerarClasseDeEntidade.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GerarEntidade gerarEntidade = new GerarEntidade(atributo,nomeClasse,caminhoProjetoDestino);
+            }
+        });
+        
         setSize(800, 300);
         setLocationRelativeTo(null);
         setVisible(true);
