@@ -33,7 +33,7 @@ public class CopiarArquivos {
                 System.out.println("Erro na cópia");
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro na cópia - arquivo não encontrado");
+            System.out.println("Erro na cópia - arquivo não encontrado - "+ex.getMessage());
             return -1;
         }
         return 0;
