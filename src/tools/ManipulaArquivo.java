@@ -13,6 +13,11 @@ public class ManipulaArquivo {
 
     public ManipulaArquivo() {
     }
+    
+    public String getNomeDoArquivo(String caminho){
+        File file = new File(caminho);
+        return file.getName();
+    }
 
     public boolean existeOArquivo(String caminhoENomeArquivo) {
         BufferedReader arquivoReader;

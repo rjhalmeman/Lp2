@@ -1,4 +1,4 @@
-package Main;
+package Geradores;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,10 +120,10 @@ public class GerarControle {
         
         ManipulaArquivo destino = new ManipulaArquivo();
         if (destino.existeOArquivo(caminhoDoProjetoDestino)){
-            destino.salvarArquivo(caminhoDoProjetoDestino+"/src/Controle/Controle.java", codigo);
+            destino.salvarArquivo(caminhoDoProjetoDestino+"/src/Controle/" + st.plMaiusc(nomeClasse) + "Controle.java", codigo);
         }
 
-        //codigo.add("");
+    
     }
     
 }

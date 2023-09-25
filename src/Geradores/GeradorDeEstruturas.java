@@ -14,7 +14,7 @@ public class GeradorDeEstruturas {
     public GeradorDeEstruturas(String caminhoProjetoDestino) {
         String src = caminhoProjetoDestino; //ajustar isso
 
-         List<String> listaString = new ArrayList<>();
+        List<String> listaString = new ArrayList<>();
         listaString.clear();
         listaString.add("/src/" + "Entidades");
         listaString.add("/src/" + "Controles");

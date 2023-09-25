@@ -1,0 +1,5 @@
+int;cpf;20
+String;nome;30
+Date;dataNascimento;10
+double;peso;5
+double;altura;10
