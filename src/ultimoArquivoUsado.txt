@@ -1,1 +1,2 @@
-/home/radames/NetBeansProjects/GeradorWebGartner/src/ClassesAtributos/Pessoa.txt
+/home/radames/NetBeansProjects/GeradorWebGartner/src/ClassesAtributos/Carro.txt
+/home/radames/NetBeansProjects/AAABBB
