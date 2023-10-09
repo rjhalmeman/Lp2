@@ -94,7 +94,7 @@ public class GerarControle {
         String ss = "";
         for (int i = 0; i < atributo.size(); i++) {
             auxiliaSplit = atributo.get(i).split(";");
-            
+
             switch (auxiliaSplit[0]) {
                 case "String":
                     ss = ss + "aux[" + i + "],";
@@ -115,9 +115,9 @@ public class GerarControle {
                     ss = ss + "Boolean.valueOf(aux[" + i + "]),";
                     break;
                 default:
-                     ss = ss + "TipoDesconhecido(aux[" + i + "]),";
-            }            
-            
+                    ss = ss + "TipoDesconhecido(aux[" + i + "]),";
+            }
+
         }
         ss = ss.substring(0, ss.length() - 1);
         codigo.add(ss);

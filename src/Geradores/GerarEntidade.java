@@ -26,11 +26,15 @@ public class GerarEntidade {
                 + " */");
         codigo.add("public class " + nomeClasse + " {");
 
+        //gerar os atributos
         codigo.add(System.lineSeparator() + " //atributos da entidade" + System.lineSeparator());
         for (int i = 0; i < atributo.size(); i++) {
             aux = atributo.get(i).split(";");
-
-            codigo.add("private " + aux[0] + " " + aux[1] + ";");
+            if (aux[2].equals("Combobox")) {
+                codigo.add("private " + aux[0] + " " + aux[1] + "; //será uma relação de 1:n (combobox)"+ System.lineSeparator());
+            } else {
+                codigo.add("private " + aux[0] + " " + aux[1] + ";"+ System.lineSeparator());
+            }
         }
         codigo.add(System.lineSeparator() + System.lineSeparator() + "//métodos construtores" + System.lineSeparator());
         codigo.add("public " + nomeClasse + "() {\n"

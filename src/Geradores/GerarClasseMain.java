@@ -16,7 +16,7 @@ public class GerarClasseMain {
         List<String> codigo = new ArrayList<>();
         String aux[];
 
-        codigo.add("package Main;");
+       
 
         codigo.add("package Main;\n"
                 + "\n"
@@ -37,7 +37,7 @@ public class GerarClasseMain {
 
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
         String caminhoClasseEntidade = caminhoProjetoDestino + "/src/Main/Main.java";
-              
+
         manipulaArquivo.salvarArquivo(caminhoClasseEntidade, codigo); //vai salvar a classe Main dentro da pasta Main, no projeto destino.
 
     }

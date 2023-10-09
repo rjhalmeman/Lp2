@@ -140,7 +140,47 @@ public class GerarGUI {
         codigo.add("// Instancia a classe de controle " + nomeClasse + "Controle.java" + nl);
         codigo.add("" + nomeClasse + "Controle " + st.plMinus(nomeClasse) + "Controle = new " + nomeClasse + "Controle();" + nl);
 
+        codigo.add("String acao;\n"
+                + "    String caminho = \"" + nomeClasse + ".csv\";\n"
+                + "    CaixaDeFerramentas cf = new CaixaDeFerramentas();\n"
+                + "    JToolBar jToolbar = new JToolBar();");
+
+        codigo.add("ManipulaArquivo manipulaArquivo = new ManipulaArquivo();" + nl + nl);
+
+        //procurar se tem combobox e declarar os lists para cada um que encontrar
+        for (int i = 0; i < atributo.size(); i++) {
+            aux = atributo.get(i).split(";");
+            if (aux[2].equals("ComboBox")) {
+                codigo.add("    //list para os itens do combobox\n" + nl
+                        + "    List<String> lista" + st.plMaiusc(aux[1]) + " = new ArrayList<>();" + nl);
+                codigo.add("String caminho" + st.plMaiusc(aux[1]) + "=" + "\"" + st.plMaiusc(aux[1]) + ".csv\";" + nl);
+            }
+        }
+
         //construtor
+        codigo.add("public " + nomeClasse + "GUI() {");
+
+        //procurar se tem combobox e declarar os lists para cada um que encontrar
+        for (int i = 0; i < atributo.size(); i++) {
+            aux = atributo.get(i).split(";");
+            if (aux[2].equals("ComboBox")) {
+                codigo.add("    //de onde vem os dados combobox\n" + nl
+                        + "    lista" + st.plMaiusc(aux[1])
+                        + " = manipulaArquivo.abrirArquivo(" + "caminho" + st.plMaiusc(aux[1])
+                        + ");////busca no arquivo csv os dados para o combobox." + nl);
+
+            }
+        }
+
+        codigo.add(" if (manipulaArquivo.existeOArquivo(caminho)) {\n"
+                + "            controle.preencherListaCarro(manipulaArquivo.abrirArquivo(caminho));\n"
+                + "        } else {\n"
+                + "            manipulaArquivo.criarArquivoVazio(caminho);\n"
+                + "        }");
+        
+        
+
+        codigo.add("} //fim do construtor");
         codigo.add(nl + nl + "}//fim da classe GUI");
 
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();

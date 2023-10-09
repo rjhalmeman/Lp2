@@ -1,6 +1,7 @@
 String;placaCarro;15
 String;nomeCarro;45
 double;pesoCarro;10
+int;corCarro;ComboBox
 Date;dataLancamento;10
 int;corDoCarro;10
 boolean;temSeguro;1

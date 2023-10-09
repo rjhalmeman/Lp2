@@ -168,7 +168,7 @@ public class GUIGerador extends JFrame {
         btGerarEstrutura.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GeradorDeEstruturas geradorDeEstruturas = new GeradorDeEstruturas(caminhoDoTxtComAtributos);
+                GeradorDeEstruturas geradorDeEstruturas = new GeradorDeEstruturas(caminhoProjetoDestino);
 
             }
         });
