@@ -173,19 +173,214 @@ public class GerarGUI {
         }
 
         codigo.add(" if (manipulaArquivo.existeOArquivo(caminho)) {\n"
-                + "            controle.preencherListaCarro(manipulaArquivo.abrirArquivo(caminho));\n"
+                + st.plMinus(nomeClasse) + "Controle.preencherListaCarro(manipulaArquivo.abrirArquivo(caminho));\n"
                 + "        } else {\n"
                 + "            manipulaArquivo.criarArquivoVazio(caminho);\n"
                 + "        }");
-        
-        
+
+        codigo.add("//componentes visuais\n"
+                + "        setTitle(\"CRUD " + nomeClasse + "\");\n"
+                + "        cp = getContentPane();\n"
+                + "\n"
+                + "        cp.setLayout(new BorderLayout());\n"
+                + "\n"
+                + "        cp.add(pnNorte, BorderLayout.NORTH);\n"
+                + "        cp.add(pnCentro, BorderLayout.CENTER);\n"
+                + "        cp.add(pnSul, BorderLayout.SOUTH);\n"
+                + "\n"
+                + "        pnNorte.setBackground(Color.LIGHT_GRAY);\n"
+                + "        pnCentro.setBackground(Color.white);\n"
+                + "        pnSul.setBackground(Color.DARK_GRAY);\n"
+                + "\n"
+                + "        pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));\n"
+                + "        pnNorte.add(jToolbar);\n"
+                + "        jToolbar.add(lbPlaca);\n"
+                + "        jToolbar.add(tfPlaca);\n"
+                + "        jToolbar.add(btBuscar);\n"
+                + "        jToolbar.add(btAdicionar);\n"
+                + "        jToolbar.add(btAlterar);\n"
+                + "        jToolbar.add(btExcluir);\n"
+                + "        jToolbar.add(btListar);\n"
+                + "        jToolbar.add(btSalvar);\n"
+                + "        jToolbar.add(btCancelar);\n"
+                + "\n"
+                + "        btBuscar.setToolTipText(\"Buscar\");\n"
+                + "        btAdicionar.setToolTipText(\"Adicionar novo registro\");\n"
+                + "        btAlterar.setToolTipText(\"Alterar um registro\");\n"
+                + "        btExcluir.setToolTipText(\"Excluir um registro\");\n"
+                + "        btListar.setToolTipText(\"Listagem\");\n"
+                + "        btSalvar.setToolTipText(\"Salvar dados do registro\");\n"
+                + "        btCancelar.setToolTipText(\"Cancelar edição (sair sem salvar)\");");
+
+        //calcular quantos atributos serão adicionados no gridCentral
+        int contAtributos = atributo.size() - 1; // desconta 1, por causa da chave primária que fica no painel norte
+        codigo.add("pnCentro.setLayout(new GridLayout(" + contAtributos + ", 2));");
+        //adicionar os atributos visuais no painel Centro
+        for (int i = 1; i < atributo.size(); i++) {
+            aux = atributo.get(i).split(";");
+            String aMinusc = st.plMinus(aux[1].trim());
+            String aMaiusc = st.plMaiusc(aux[1].trim());
+            switch (aux[0]) {
+                case "String":
+                case "int":
+                case "double":
+                case "float":
+                case "Date":
+                    codigo.add("        pnCentro.add(lb" + aMaiusc + ");" + nl
+                            + "        pnCentro.add(tf" + aMaiusc + ");" + nl);
+                    break;
+                case "boolean":
+                    codigo.add("        pnCentro.add(new JLabel(\"\"));" + nl
+                            + "        pnCentro.add(checkBox" + aMaiusc + ");" + nl);
+                    break;
+                default:
+                    codigo.add("        pnCentro.add(tipoDesconhecido" + st.plMaiusc(aux[1]) + ");" + nl);
+            }
+
+        }
+
+        codigo.add("  pnSul.add(lbAviso);");
+        codigo.add("");
+
+        codigo.add(" //status inicial dos botoes\n"
+                + "        btAdicionar.setVisible(false);\n"
+                + "        btSalvar.setVisible(false);\n"
+                + "        btCancelar.setVisible(false);\n"
+                + "        btAlterar.setVisible(false);\n"
+                + "        btExcluir.setVisible(false);\n"
+                + "        btListar.setVisible(true);");
+
+        codigo.add(" //status inicial dos atributos\n");
+        aux = atributo.get(0).split(";");
+        String aMaiusc = st.plMaiusc(aux[1].trim());
+        codigo.add("        tf" + aMaiusc + ".setEditable(true);" + nl);
+
+        for (int i = 1; i < atributo.size(); i++) {
+            aux = atributo.get(i).split(";");
+            String aMinusc = st.plMinus(aux[1].trim());
+            aMaiusc = st.plMaiusc(aux[1].trim());
+            switch (aux[0]) {
+                case "String":
+                case "int":
+                case "double":
+                case "float":
+                case "Date":
+                    codigo.add("        tf" + aMaiusc + ".setEditable(false);" + nl);
+
+                    break;
+                case "boolean":
+                    codigo.add("        checkBox" + aMaiusc + ".setEnabled(false);" + nl);
+                    break;
+                default:
+                    codigo.add("        tipoDesconhecido" + st.plMaiusc(aux[1]) + ".setEditable(false);" + nl);
+            }
+
+        }
+        codigo.add("//fonte e cor do aviso");
+        codigo.add("lbAviso.setOpaque(true);\n"
+                + "        lbAviso.setBackground(Color.BLACK);\n"
+                + "        // Definir a cor da fonte como branca\n"
+                + "        lbAviso.setForeground(Color.WHITE);\n"
+                + "\n"
+                + "        // Definir a fonte em negrito\n"
+                + "        Font fonte = lbAviso.getFont();\n"
+                + "        Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());\n"
+                + "        lbAviso.setFont(fonteNegrito);");
+
+        aux = atributo.get(0).split(";");
+        aMaiusc = st.plMaiusc(aux[1].trim());
+        codigo.add("//listeners\n"
+                + "        tf" + aMaiusc + ".addFocusListener(new FocusListener() {\n"
+                + "            @Override\n"
+                + "            public void focusGained(FocusEvent fe) {\n"
+                + "                lbAviso.setText(\"Digite a " + aMaiusc + " de um carro\");\n"
+                + "                tf" + aMaiusc + ".setBackground(Color.green);\n"
+                + "                btAdicionar.setVisible(false);\n"
+                + "                btAlterar.setVisible(false);\n"
+                + "\n"
+                + "                btExcluir.setVisible(false);\n"
+                + "                if (!btSalvar.isVisible()) {\n"
+                + "                    btListar.setVisible(true);\n"
+                + "                }\n"
+                + "            }\n"
+                + "\n"
+                + "            @Override\n"
+                + "            public void focusLost(FocusEvent fe) {\n"
+                + "                tf" + aMaiusc + ".setBackground(Color.white);\n"
+                + "            }\n"
+                + "        });");
+
+        codigo.add(nl + "//botão buscar" + nl);
+        codigo.add("        btBuscar.addActionListener(new ActionListener() {\n"
+                + "            @Override\n"
+                + "            public void actionPerformed(ActionEvent ae) {");
+        codigo.add("if (tf" + aMaiusc + ".getText().isEmpty()) {\n"
+                + "                    tf" + aMaiusc + ".requestFocus();\n"
+                + "                } else {");
+
+        codigo.add(" " + st.plMinus(nomeClasse) + " = " + st.plMinus(nomeClasse) + "Controle.buscar(tf" + aMaiusc + ".getText());\n"
+                + "                    if (" + st.plMinus(nomeClasse) + " == null) {//não achou na lista");
+        codigo.add(" lbAviso.setText(\"Não achou na lista\");\n"
+                + "                        btAdicionar.setVisible(true);\n"
+                + "                        btAlterar.setVisible(false);\n"
+                + "                        btExcluir.setVisible(false);");
+
+        for (int i = 1; i < atributo.size(); i++) {
+            aux = atributo.get(i).split(";");
+            String aMinusc = st.plMinus(aux[1].trim());
+            aMaiusc = st.plMaiusc(aux[1].trim());
+            switch (aux[0]) {
+                case "String":
+                case "int":
+                case "double":
+                case "float":
+                case "Date":
+                    codigo.add("        tf" + aMaiusc + ".setText(\"\");" + nl);
+
+                    break;
+                case "boolean":
+                    codigo.add("        checkBox" + aMaiusc + ".setSelected(false);" + nl);
+                    break;
+                default:
+                    codigo.add("        tipoDesconhecido" + st.plMaiusc(aux[1]) + ".setEditable(false);" + nl);
+            }
+        }
+
+        codigo.add("} else {//encontra na lista");
+
+        for (int i = 0; i < atributo.size(); i++) {
+            aux = atributo.get(i).split(";");
+            String aMinusc = st.plMinus(aux[1].trim());
+            aMaiusc = st.plMaiusc(aux[1].trim());
+            String oTipo = "String.valueOf(" + st.plMinus(nomeClasse) + ".get" + aMaiusc + "()));";
+            switch (aux[0]) {
+                case "String":
+                      codigo.add("        tf" + aMaiusc + ".setText(" + st.plMinus(nomeClasse) + ".get" + aMaiusc + "());"+nl);
+                    break;
+                case "int":
+                case "double":
+                case "float":
+                case "Date":
+                   
+                     codigo.add("        tf" + aMaiusc + ".setText("+oTipo);
+                    break;
+                case "boolean":
+                    codigo.add("        checkBox" + aMaiusc + ".setSelected(false);" + nl);
+                    break;
+                default:
+                    codigo.add("        tipoDesconhecido" + st.plMaiusc(aux[1]) + ".setEditable(false);" + nl);
+            }
+        }
+
+        codigo.add("");
+        codigo.add("");
 
         codigo.add("} //fim do construtor");
         codigo.add(nl + nl + "}//fim da classe GUI");
 
         ManipulaArquivo manipulaArquivo = new ManipulaArquivo();
         String caminhoClasseEntidade = caminhoProjetoDestino + "/src/GUIs/" + nomeClasse + "GUI.java";
-        System.out.println("cce " + caminhoClasseEntidade);
+        //System.out.println("cce " + caminhoClasseEntidade);
         // System.exit(0);
         manipulaArquivo.salvarArquivo(caminhoClasseEntidade, codigo); //vai salvar a classe de entidade dentro da pasta entidades, no projeto destino.
 
