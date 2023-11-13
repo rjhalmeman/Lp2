@@ -88,7 +88,7 @@ public class MenuPrincipal extends JFrame {
 //            }
 //        });
 
-        setSize(400, 300);
+        setSize(400, 200);
         setLocation( new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setVisible(true);
 
