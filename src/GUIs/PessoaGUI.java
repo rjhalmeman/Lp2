@@ -40,6 +40,7 @@ import tools.CaixaDeFerramentas;
 import tools.DateTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import tools.CentroDoMonitorMaior;
 import tools.DiretorioDaAplicacao;
 import tools.ImagemAjustada;
 import tools.CopiarArquivos;
@@ -156,10 +157,10 @@ public class PessoaGUI extends JDialog {
         pnCentro.add(tfNome);
         pnCentro.add(lbDatanascimento);
         pnCentro.add(tfDatanascimento);
+        //pnCentro.add(new JLabel(""));
         pnCentro.add(cbMorto);
-        pnCentro.add(new JLabel(""));
         pnCentro.add(lbCaminhoFt);
-        pnCentro.add(new JLabel(""));
+      //  pnCentro.add(new JLabel(""));
         pnFK.add(lbCorDosOlhos);
         pnFK.add(localizarCorDosOlhos);
         pnCentro.add(pnFK);
@@ -615,7 +616,7 @@ public class PessoaGUI extends JDialog {
 
         setModal(true);
         pack();
-        setLocationRelativeTo(null);//centraliza na tela
+        setLocation( new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setVisible(true);
     }//fim do contrutor de GUI
 } //fim da classe

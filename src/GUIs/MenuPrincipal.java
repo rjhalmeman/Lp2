@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import tools.CentroDoMonitorMaior;
 
 /**
  *
@@ -88,7 +89,7 @@ public class MenuPrincipal extends JFrame {
 //        });
 
         setSize(400, 300);
-        setLocationRelativeTo(null);
+        setLocation( new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setVisible(true);
 
     }
